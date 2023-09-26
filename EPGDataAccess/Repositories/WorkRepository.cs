@@ -1,0 +1,84 @@
+﻿using AutoMapper;
+using EPGApplication.Repositories.IRepositories;
+using EPGApplication.Repositories.NormalRepositories;
+using EPGDomain;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+
+namespace EPGDataAccess.Repositories
+{
+    public class WorkRepository: MainRepository, IWorkRepository
+    {
+        public WorkRepository(DataInstance instance) : base(instance) { }
+        public List<Work>? GetWorks()
+        {
+            return Instance.Works.ToList();        }
+        public Work? GetWork(int id)
+        {
+            return Instance.Works.Find(id);
+        }
+        public List<Work>? GetTranslations(Work work)
+        {
+            return Instance.Works.Where(w => w.OriginalWork == work).ToList();
+        }
+        public List<Review>? GetReviews(Work work)
+        {
+            return Instance.Reviews.Where(w => w.Work == work).ToList();
+        }
+        public List<Note>? GetNotes(Work work)
+        {
+            return Instance.Notes.Where(n => n.Work == work).ToList();
+        }
+        public Work? CreateWork(Work work)
+        {
+            Instance.Add(work);
+            Instance.SaveChanges();
+            return work;
+        }
+        public bool UpdateWork(Work oldWork, Work data)
+        {
+            oldWork = data;
+            Instance.SaveChanges();
+            if (GetWork(oldWork.Id) == data) return true;
+            return false;
+        }
+        public void DeleteWorkTranslations(Work work)
+        {
+            var Translations = Instance.Works.Where(w => w.OriginalWork == work);
+            foreach(var translation in Translations)
+            {
+                DeleteWork(translation);
+            }
+        }
+        public void DeleteWorkReviews(Work work)
+        {
+            var Reviews = Instance.Reviews.Where(r => r.Work == work);
+            foreach (var Review in Reviews)
+            {
+                Instance.RemoveRange(Instance.Comments.Where(c => c.Review == Review));
+            }
+            Instance.RemoveRange(Reviews);
+        }
+        public void DeleteWorkNotes(Work work)
+        {
+            Instance.RemoveRange(Instance.Notes.Where(n => n.Work == work));
+        }
+        public bool DeleteWork(Work work)
+        {
+            if (work != null)
+            {
+                DeleteWorkNotes(work);
+                DeleteWorkReviews(work);
+                DeleteWorkTranslations(work);
+                Instance.Remove(work);
+                Instance.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+    }
+}
