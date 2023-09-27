@@ -18,5 +18,6 @@ namespace EPGApplication.Repositories.IRepositories
         public bool UpdateReview(Review oldReview, Review Data);
         public bool DeleteReview(Review review);
         public void DeleteReviewComments(Review review);
+        public void GetSuperiorObjects(Review4Create data, Review review);
     }
 }

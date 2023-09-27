@@ -5,23 +5,24 @@ using System.Reflection.Metadata.Ecma335;
 using EPGApplication.Repositories.IRepositories;
 using EPGApplication.DTOs.CreateUpdate;
 using EPGDataAccess;
+using Microsoft.EntityFrameworkCore;
 
 namespace EPGApplication.Repositories.NormalRepositories
 {
     public class CommentRepository : MainRepository, ICommentRepository
     {
-        public CommentRepository(DataInstance instance) : base(instance) { }
+        public CommentRepository(DataInstance instance, IMapper mapper) : base(instance, mapper) { }
         public List<Comment>? GetComments()
         {
-            return Instance.Comments.ToList();
+            return Instance.Comments.Include(c => c.OriginalComment).Include(c => c.Review).ToList();
         }
         public Comment? GetComment(int? id)
         {
-            return Instance.Comments.FirstOrDefault(c => c.Id == id);
+            return Instance.Comments.Include(c => c.OriginalComment).Include(c => c.Review).FirstOrDefault(c => c.Id == id);
         }
         public List<Comment>? GetResponsesFromComment(Comment? comment)
         {
-            return Instance.Comments.Where(c => c.OriginalComment == comment).ToList();
+            return Instance.Comments.Include(c => c.OriginalComment).Include(c => c.Review).Where(c => c.OriginalComment == comment).ToList();
         }
         public Comment? CreateComment(Comment? Data)
         {
@@ -50,6 +51,11 @@ namespace EPGApplication.Repositories.NormalRepositories
                 return true;
             }
             return false;
+        }
+        public void GetSuperiorObjects(Comment4Create data, Comment comment)
+        {
+            comment.Review = Instance.Reviews.Include(r => r.Work).FirstOrDefault(r => r.Id == data.ReviewId);
+            comment.OriginalComment = Instance.Comments.Include(c => c.OriginalComment).Include(c => c.Review).FirstOrDefault(c => c.Id == data.OriginalCommentId);
         }
     }
 }

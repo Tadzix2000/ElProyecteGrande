@@ -14,9 +14,9 @@ namespace EPGDomain
         public Work? Work { get; set; }
         //public User? Owner { get; set; }
         public DateTime NoteDate { get; set; }
-        public ServiceUser ServiceUser { get; set; }
-        [ForeignKey(nameof(ServiceUser))]
-        public string ServiceUserId { get; set; }
+        //public ServiceUser ServiceUser { get; set; }
+        //[ForeignKey(nameof(ServiceUser))]
+        //public string ServiceUserId { get; set; }
         public bool VerifyNullables() =>
             Work != null &&
             NoteDate != null &&

@@ -20,5 +20,6 @@ namespace EPGApplication.Repositories.IRepositories
         public bool UpdateAuthor(Author oldAuthor, Author data);
         public void DeleteAuthorWorks(Author author);
         public bool DeleteAuthor(Author author);
+        public void GetSuperiorObjects(Author4Create data, Author author);
     }
 }

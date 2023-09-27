@@ -22,5 +22,6 @@ namespace EPGApplication.Repositories.IRepositories
         public void DeleteWorkReviews(Work work);
         public void DeleteWorkNotes(Work work);
         public bool DeleteWork(Work work);
+        public void GetSuperiorObjects(Work4Create data, Work work);
     }
 }

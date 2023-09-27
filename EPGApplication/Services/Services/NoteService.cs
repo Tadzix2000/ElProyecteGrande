@@ -40,6 +40,7 @@ namespace EPGApplication.Services.Services
         public NoteDTO? CreateNote(Note4Create note, INoteRepository repository)
         {
             var Note = Mapper.Map<Note>(note);
+            repository.GetSuperiorObjects(note, Note);
             if (!Note.VerifyNullables()) return null;
             Note = repository.CreateNote(Note);
             return Mapper.Map<NoteDTO>(Note);
@@ -47,8 +48,9 @@ namespace EPGApplication.Services.Services
         public NoteDTO? UpdateNote(Note4Create note, Note oldNote, INoteRepository repository)
         {
             var Note = Mapper.Map<Note>(note);
+            repository.GetSuperiorObjects(note, Note);
             if (!Note.VerifyNullables()) return null;
-            if (repository.UpdateNote(oldNote, Note)) return Mapper.Map<NoteDTO>(oldNote);
+            if (repository.UpdateNote(oldNote, note)) return Mapper.Map<NoteDTO>(oldNote);
             return null;
         }
         public NoteDTO? DeleteNote(Note note, INoteRepository repository)

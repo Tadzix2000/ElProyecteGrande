@@ -18,5 +18,6 @@ namespace EPGApplication.Repositories.IRepositories
         public bool UpdateComment(Comment oldComment, Comment Data);
         public bool DeleteComment(Comment comment);
         public void DeleteCommentResponses(Comment comment);
+        public void GetSuperiorObjects(Comment4Create data, Comment comment);
     }
 }

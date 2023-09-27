@@ -84,6 +84,7 @@ namespace EPGApplication.Services.Services
         public WorkDTO? CreateWork(Work4Create Data, IWorkRepository repository)
         {
             var newWork = Mapper.Map<Work>(Data);
+            repository.GetSuperiorObjects(Data, newWork);
             if (!newWork.VerifyNullables()) return null;
             newWork = repository.CreateWork(newWork);
             if (newWork is null) return null;
@@ -92,6 +93,7 @@ namespace EPGApplication.Services.Services
         public WorkDTO? UpdateWork(Work4Create Data, Work oldWork, IWorkRepository repository)
         {
             var workData = Mapper.Map<Work>(Data);
+            repository.GetSuperiorObjects(Data, workData);
             if (!workData.VerifyNullables()) return null;
             if (repository.UpdateWork(oldWork, workData)) return Mapper.Map<WorkDTO>(oldWork);
             return null;

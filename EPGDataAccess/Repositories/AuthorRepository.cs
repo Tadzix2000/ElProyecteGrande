@@ -9,12 +9,14 @@ using EPGApplication.Repositories.IRepositories;
 using EPGDataAccess;
 using EPGDataAccess.Repositories;
 using EPGDomain;
+using EPGApplication.DTOs.CreateUpdate;
+using Microsoft.EntityFrameworkCore;
 
 namespace EPGApplication.Repositories.NormalRepositories
 {
     public class AuthorRepository : MainRepository, IAuthorRepository
     {
-        public AuthorRepository(DataInstance instance) : base(instance)
+        public AuthorRepository(DataInstance instance, IMapper mapper) : base(instance, mapper)
         {
         }
 
@@ -28,7 +30,7 @@ namespace EPGApplication.Repositories.NormalRepositories
         }
         public List<Work>? GetWorksFromAuthor(Author author)
         {
-            return Instance.Works.Where(w => w.Author == author).ToList();
+            return Instance.Works.Include(w => w.Author).Where(w => w.Author == author).ToList();
         }
         public Author? CreateAuthor(Author author)
         {
@@ -46,7 +48,7 @@ namespace EPGApplication.Repositories.NormalRepositories
         public void DeleteAuthorWorks(Author author)
         {
             var works = Instance.Works.Where(w => w.Author == author);
-            var fastRepo = new WorkRepository(Instance);
+            var fastRepo = new WorkRepository(Instance, Mapper);
             foreach(var work in works) fastRepo.DeleteWork(work);
         }
         public bool DeleteAuthor(Author author)
@@ -55,10 +57,13 @@ namespace EPGApplication.Repositories.NormalRepositories
             {
                 DeleteAuthorWorks(author);
                 Instance.Remove(author);
+                Instance.SaveChanges();
                 return true;
             }
             return false;
         }
+
+        public void GetSuperiorObjects(Author4Create data, Author author) { }
 
 
 

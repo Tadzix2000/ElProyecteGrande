@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using EPGApplication.DTOs.CreateUpdate;
 using EPGApplication.Repositories.IRepositories;
 using EPGApplication.Repositories.NormalRepositories;
 using EPGDomain;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,21 +15,22 @@ namespace EPGDataAccess.Repositories
 {
     public class WorkRepository: MainRepository, IWorkRepository
     {
-        public WorkRepository(DataInstance instance) : base(instance) { }
+        public WorkRepository(DataInstance instance, IMapper mapper) : base(instance, mapper) { }
         public List<Work>? GetWorks()
         {
-            return Instance.Works.ToList();        }
+            return Instance.Works.Include(w => w.Author).Include(w => w.OriginalWork).ToList();
+        }
         public Work? GetWork(int id)
         {
-            return Instance.Works.Find(id);
+            return Instance.Works.Include(w => w.Author).Include(w => w.OriginalWork).FirstOrDefault(w => w.Id == id);
         }
         public List<Work>? GetTranslations(Work work)
         {
-            return Instance.Works.Where(w => w.OriginalWork == work).ToList();
+            return Instance.Works.Where(w => w.OriginalWork == work).Include(w => w.Author).Include(w => w.OriginalWork).ToList();
         }
         public List<Review>? GetReviews(Work work)
         {
-            return Instance.Reviews.Where(w => w.Work == work).ToList();
+            return Instance.Reviews.Include(r => r.Work).Where(w => w.Work == work).ToList();
         }
         public List<Note>? GetNotes(Work work)
         {
@@ -79,6 +82,11 @@ namespace EPGDataAccess.Repositories
                 return true;
             }
             return false;
+        }
+        public void GetSuperiorObjects(Work4Create data, Work work)
+        {
+            work.OriginalWork = Instance.Works.Include(w => w.Author).Include(w => w.OriginalWork).FirstOrDefault(w => w.Id == data.OriginalWorkId);
+            work.Author = Instance.Authors.FirstOrDefault(a => a.Id == data.AuthorId);
         }
     }
 }

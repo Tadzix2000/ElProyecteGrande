@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace EPGApplication.Services.Services
 {
@@ -58,6 +59,7 @@ namespace EPGApplication.Services.Services
         public ReviewDTO? CreateReview(Review4Create Data, IReviewRepository repository)
         {
             var newReview = Mapper.Map<Review>(Data);
+            repository.GetSuperiorObjects(Data, newReview);
             if (!newReview.VerifyNullables()) return null;
             newReview = repository.CreateReview(newReview);
             if (newReview is null) return null;
@@ -66,6 +68,7 @@ namespace EPGApplication.Services.Services
         public ReviewDTO? UpdateReview(Review4Create review, Review oldReview, IReviewRepository repository)
         {
             var reviewData = Mapper.Map<Review>(review);
+            repository.GetSuperiorObjects(review, reviewData);
             if (!reviewData.VerifyNullables()) return null;
             if (repository.UpdateReview(oldReview, reviewData)) return Mapper.Map<ReviewDTO>(oldReview);
             return null;

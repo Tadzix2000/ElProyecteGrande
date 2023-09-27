@@ -11,14 +11,14 @@ namespace EPGApplication
         {
             CreateMap<Author, AuthorDTO>();
             CreateMap<Comment, CommentDTO>();
-            CreateMap<NoteDTO, Note>();
-            CreateMap<ReviewDTO, Review>();
-            CreateMap<WorkDTO, Work>();
+            CreateMap<Note, NoteDTO>();
+            CreateMap<Review, ReviewDTO>();
+            CreateMap<Work, WorkDTO>();
             CreateMap<Author4Create, Author>();
-            CreateMap<Comment, Comment4Create>();
-            CreateMap<Note, Note4Create>();
-            CreateMap<Review, Review4Create>();
-            CreateMap<Work, Work4Create>();
+            CreateMap<Comment4Create, Comment>();
+            CreateMap<Note4Create, Note>();
+            CreateMap<Review4Create, Review>();
+            CreateMap<Work4Create, Work>();
         }
     }
 }

@@ -11,7 +11,7 @@ namespace EPGApplication.DTOs.CreateUpdate
     public class Comment4Create
     {
         public int ReviewId { get; set; }
-        public int UserId { get; set; }
+        //public int UserId { get; set; }
         public int OriginalCommentId { get; set; }
         public DateTime PublicationDate { get; set; }
         [MaxLength(2048)]

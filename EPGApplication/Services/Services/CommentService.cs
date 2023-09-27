@@ -55,6 +55,7 @@ namespace EPGApplication.Services.Services
         public CommentDTO? CreateComment(Comment4Create Data, ICommentRepository repository)
         {
             var Comment = Mapper.Map<Comment>(Data);
+            repository.GetSuperiorObjects(Data, Comment);
             if (!Comment.VerifyNullables()) return null;
             Comment = repository.CreateComment(Comment);
             if (Comment is null) return null;
@@ -63,6 +64,7 @@ namespace EPGApplication.Services.Services
         public CommentDTO? UpdateComment(Comment4Create Data, Comment oldComment, ICommentRepository repository)
         {
             var Comment = Mapper.Map<Comment>(Data);
+            repository.GetSuperiorObjects(Data, Comment);
             if (!Comment.VerifyNullables()) return null;
             if (repository.UpdateComment(Comment, oldComment)) return Mapper.Map<CommentDTO>(Comment);
             return null;

@@ -13,9 +13,10 @@ namespace EPGApplication.Repositories.NormalRepositories
     {
         public DataInstance Instance;
         public IMapper Mapper { get; set; }
-        public MainRepository(DataInstance instance)
+        public MainRepository(DataInstance instance, IMapper mapper)
         {
             Instance = instance;
+            Mapper = mapper;
         }
     }
 }

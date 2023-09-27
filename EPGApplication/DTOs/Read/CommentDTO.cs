@@ -14,7 +14,7 @@ namespace EPGApplication.DTOs.Read
         public DateTime PublicationDate { get; set; }
         [MaxLength(2048)]
         public string Body { get; set; }
-        public List<CommentDTO>? Responses { get; set; }
+        //public List<CommentDTO>? Responses { get; set; }
         //public void AssignFeatures(ICommentService service, Comment comment, ICommentRepository repository)
         //{
         //    this.Responses = service.GetResponsesFromComment(comment, repository);

@@ -59,6 +59,7 @@ namespace EPGApplication.Services.Services
         public AuthorDTO? CreateAuthor(Author4Create author, IAuthorRepository repository)
         {
             var newAuthor = Mapper.Map<Author>(author);
+            repository.GetSuperiorObjects(author, newAuthor);
             if (!newAuthor.VerifyNullables()) return null;
             newAuthor = repository.CreateAuthor(newAuthor);
             if (newAuthor is null) return null;
@@ -67,6 +68,7 @@ namespace EPGApplication.Services.Services
         public AuthorDTO? UpdateAuthor(Author4Create data, Author oldAuthor, IAuthorRepository repository)
         {
             var authorData = Mapper.Map<Author>(data);
+            repository.GetSuperiorObjects(data, authorData);
             if (!authorData.VerifyNullables()) return null;
             if (repository.UpdateAuthor(oldAuthor, authorData)) return Mapper.Map<AuthorDTO>(oldAuthor);
             return null;

@@ -10,7 +10,7 @@ namespace EPGApplication.DTOs.Read
         public int Id { get; set; }
         [MaxLength(32)]
         public string Name { get; set; }
-        public ServiceUser Owner { get; set; }
+        //public ServiceUser Owner { get; set; }
         [MaxLength(2048)]
         public string Description { get; set; }
         [MaxLength(32)]
@@ -20,7 +20,7 @@ namespace EPGApplication.DTOs.Read
         [MaxLength(1024)]
         public string FurtherLinks { get; set; }
         public DateTime CreationDate { get; set; }
-        public List<WorkDTO> Works { get; set; }
+        //public List<WorkDTO> Works { get; set; }
         //public void AssignFeatures(IAuthorService service, Author author, IAuthorRepository repository, IWorkService workService)
         //{
         //    Works = service.GetWorks(author, repository, workService);
