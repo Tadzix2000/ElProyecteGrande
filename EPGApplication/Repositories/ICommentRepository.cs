@@ -15,7 +15,7 @@ namespace EPGApplication.Repositories.IRepositories
         public Comment? GetComment(int? id);
         public List<Comment>? GetResponsesFromComment(Comment comment);
         public Comment? CreateComment(Comment Data);
-        public bool UpdateComment(Comment oldComment, Comment Data);
+        public bool UpdateComment(Comment oldComment, Comment4Create Data);
         public bool DeleteComment(Comment comment);
         public void DeleteCommentResponses(Comment comment);
         public void GetSuperiorObjects(Comment4Create data, Comment comment);

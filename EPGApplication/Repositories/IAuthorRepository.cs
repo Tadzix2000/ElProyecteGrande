@@ -17,7 +17,7 @@ namespace EPGApplication.Repositories.IRepositories
         public Author? GetAuthor(int id);
         public List<Work>? GetWorksFromAuthor(Author author);
         public Author? CreateAuthor(Author author);
-        public bool UpdateAuthor(Author oldAuthor, Author data);
+        public bool UpdateAuthor(Author oldAuthor, Author4Create data);
         public void DeleteAuthorWorks(Author author);
         public bool DeleteAuthor(Author author);
         public void GetSuperiorObjects(Author4Create data, Author author);

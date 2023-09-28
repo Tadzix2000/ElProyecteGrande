@@ -13,11 +13,11 @@ namespace EPGApplication.Repositories.NormalRepositories
         public NoteRepository(DataInstance instance, IMapper mapper) : base(instance, mapper) { }
         public List<Note>? GetNotes()
         {
-            return Instance.Notes.ToList();
+            return Instance.Notes.Include(n => n.Work).ToList();
         }
         public Note? GetNote(int id)
         {
-            return Instance.Notes.Find(id);
+            return Instance.Notes.Include(n => n.Work).FirstOrDefault(n => n.Id == id);
         }
         public Note? CreateNote(Note Data)
         {
@@ -28,9 +28,9 @@ namespace EPGApplication.Repositories.NormalRepositories
         public bool UpdateNote(Note oldNote, Note4Create Data)
         {            
             var noteToUpdate = Instance.Notes.FirstOrDefault(n => n.Id == oldNote.Id);
-            noteToUpdate = Mapper.Map<Note>(Data);
+            Mapper.Map(Data, noteToUpdate);
             Instance.SaveChanges();
-            if (GetNote(oldNote.Id) == oldNote) return false;
+            //if (GetNote(oldNote.Id) == oldNote) return false;
             return true;
         }
         public bool DeleteNote(Note Note)

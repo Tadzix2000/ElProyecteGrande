@@ -67,10 +67,10 @@ namespace EPGApplication.Services.Services
         }
         public ReviewDTO? UpdateReview(Review4Create review, Review oldReview, IReviewRepository repository)
         {
-            var reviewData = Mapper.Map<Review>(review);
-            repository.GetSuperiorObjects(review, reviewData);
-            if (!reviewData.VerifyNullables()) return null;
-            if (repository.UpdateReview(oldReview, reviewData)) return Mapper.Map<ReviewDTO>(oldReview);
+            var Review = Mapper.Map<Review>(review);
+            repository.GetSuperiorObjects(review, Review);
+            if (!Review.VerifyNullables()) return null;
+            if (repository.UpdateReview(oldReview, review)) return Mapper.Map<ReviewDTO>(oldReview);
             return null;
         }
         public ReviewDTO? DeleteReview(Review review, IReviewRepository repository)

@@ -81,7 +81,11 @@ namespace EPGProjectAPI.Controllers
         [HttpPut("{id:int}")]
         public IActionResult UpdateAuthor(int id, [FromBody] Author4Create UpdateData)
         {
-            throw new NotImplementedException();
+            var author = service.JustGetAuthor(id, repository);
+            if (author is null) return NotFound();
+            var authorDTO = service.UpdateAuthor(UpdateData, author, repository);
+            if (authorDTO is null) return BadRequest();
+            return NoContent();
 
         }
     }

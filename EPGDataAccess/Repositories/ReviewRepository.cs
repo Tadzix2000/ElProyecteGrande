@@ -33,12 +33,12 @@ namespace EPGDataAccess.Repositories
             Instance.SaveChanges();
             return review;
         }
-        public bool UpdateReview(Review oldReview, Review Data)
+        public bool UpdateReview(Review oldReview, Review4Create Data)
         {
-            oldReview = Data;
+            var reviewToUpdate = Instance.Reviews.FirstOrDefault(r => r.Id == oldReview.Id);
+            Mapper.Map(Data, reviewToUpdate);
             Instance.SaveChanges();
-            if (GetReview(oldReview.Id) == Data) return true;
-            return false;
+            return true;
         }
         public bool DeleteReview(Review review)
         {

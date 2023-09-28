@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EPGApplication.DTOs.CreateUpdate;
+using EPGApplication.DTOs.Read;
 using EPGApplication.Repositories.IRepositories;
 using EPGApplication.Repositories.NormalRepositories;
 using EPGDomain;
@@ -34,7 +35,7 @@ namespace EPGDataAccess.Repositories
         }
         public List<Note>? GetNotes(Work work)
         {
-            return Instance.Notes.Where(n => n.Work == work).ToList();
+            return Instance.Notes.Include(n => n.Work).Where(n => n.Work == work).ToList();
         }
         public Work? CreateWork(Work work)
         {
@@ -42,12 +43,12 @@ namespace EPGDataAccess.Repositories
             Instance.SaveChanges();
             return work;
         }
-        public bool UpdateWork(Work oldWork, Work data)
+        public bool UpdateWork(Work oldWork, Work4Create data)
         {
-            oldWork = data;
+            var workToUpdate = Instance.Works.FirstOrDefault(w => w.Id == oldWork.Id);
+            Mapper.Map(data, workToUpdate);
             Instance.SaveChanges();
-            if (GetWork(oldWork.Id) == data) return true;
-            return false;
+            return true;
         }
         public void DeleteWorkTranslations(Work work)
         {

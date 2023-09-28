@@ -92,10 +92,11 @@ namespace EPGApplication.Services.Services
         }
         public WorkDTO? UpdateWork(Work4Create Data, Work oldWork, IWorkRepository repository)
         {
-            var workData = Mapper.Map<Work>(Data);
-            repository.GetSuperiorObjects(Data, workData);
-            if (!workData.VerifyNullables()) return null;
-            if (repository.UpdateWork(oldWork, workData)) return Mapper.Map<WorkDTO>(oldWork);
+            var Work = Mapper.Map<Work>(Data);
+            repository.UpdateWork(oldWork, Data);
+            repository.GetSuperiorObjects(Data, Work);
+            if (!Work.VerifyNullables()) return null;
+            if (repository.UpdateWork(oldWork, Data)) return Mapper.Map<WorkDTO>(oldWork);
             return null;
         }
         public WorkDTO? DeleteWork(Work work, IWorkRepository repository)

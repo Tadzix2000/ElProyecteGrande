@@ -67,10 +67,11 @@ namespace EPGApplication.Services.Services
         }
         public AuthorDTO? UpdateAuthor(Author4Create data, Author oldAuthor, IAuthorRepository repository)
         {
-            var authorData = Mapper.Map<Author>(data);
-            repository.GetSuperiorObjects(data, authorData);
-            if (!authorData.VerifyNullables()) return null;
-            if (repository.UpdateAuthor(oldAuthor, authorData)) return Mapper.Map<AuthorDTO>(oldAuthor);
+            var Author = Mapper.Map<Author>(data);
+            repository.UpdateAuthor(oldAuthor, data);
+            repository.GetSuperiorObjects(data, Author);
+            if (!Author.VerifyNullables()) return null;
+            if (repository.UpdateAuthor(oldAuthor, data)) return Mapper.Map<AuthorDTO>(oldAuthor);
             return null;
         }
         public AuthorDTO? DeleteAuthor(Author author, IAuthorRepository repository)

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace EPGApplication.Services.Services
 {
@@ -64,9 +65,10 @@ namespace EPGApplication.Services.Services
         public CommentDTO? UpdateComment(Comment4Create Data, Comment oldComment, ICommentRepository repository)
         {
             var Comment = Mapper.Map<Comment>(Data);
+            repository.UpdateComment(oldComment, Data);
             repository.GetSuperiorObjects(Data, Comment);
             if (!Comment.VerifyNullables()) return null;
-            if (repository.UpdateComment(Comment, oldComment)) return Mapper.Map<CommentDTO>(Comment);
+            if (repository.UpdateComment(oldComment, Data)) return Mapper.Map<CommentDTO>(oldComment);
             return null;
         }
         public CommentDTO? DeleteComment(Comment comment, ICommentRepository repository)

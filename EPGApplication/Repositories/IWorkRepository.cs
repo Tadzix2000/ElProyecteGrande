@@ -17,7 +17,7 @@ namespace EPGApplication.Repositories.IRepositories
         public List<Review> GetReviews(Work work);
         public List<Note> GetNotes(Work work);
         public Work CreateWork(Work work);
-        public bool UpdateWork(Work oldWork, Work data);
+        public bool UpdateWork(Work oldWork, Work4Create data);
         public void DeleteWorkTranslations(Work work);
         public void DeleteWorkReviews(Work work);
         public void DeleteWorkNotes(Work work);

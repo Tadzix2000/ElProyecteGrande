@@ -93,7 +93,11 @@ namespace EPGProjectAPI.Controllers
         [HttpPut("{id:int}")]
         public IActionResult UpdateWork(int id, [FromBody] Work4Create UpdateData)
         {
-            throw new NotImplementedException();
+            var work = service.JustGetWork(id, repository);
+            if (work is null) return NotFound();
+            var workDTO = service.UpdateWork(UpdateData, work, repository);
+            if (workDTO is null) return BadRequest();
+            return NoContent();
         }
     }
 }

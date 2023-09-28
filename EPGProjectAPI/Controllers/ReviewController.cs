@@ -75,7 +75,11 @@ namespace EPGProjectAPI.Controllers
         [HttpPut("{id:int}")]
         public IActionResult UpdateReview(int id, [FromBody] Review4Create UpdateData)
         {
-            throw new NotImplementedException();
+            var review = service.JustGetReview(id, repository);
+            if (review is null) return NotFound();
+            var ReviewDTO = service.UpdateReview(UpdateData, review, repository);
+            if (ReviewDTO is null) return BadRequest();
+            return NoContent();
         }
     }
 }

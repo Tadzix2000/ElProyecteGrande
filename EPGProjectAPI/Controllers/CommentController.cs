@@ -71,7 +71,11 @@ namespace EPGProjectAPI.Controllers
         [HttpPut("{id:int}")]
         public IActionResult UpdateComment(int id, [FromBody] Comment4Create UpdateData)
         {
-            throw new NotImplementedException();
+            var comment = service.JustGetComment(id, repository);
+            if (comment is null) return NotFound();
+            var commentDTO = service.UpdateComment(UpdateData, comment, repository);
+            if (commentDTO is null) return BadRequest();
+            return NoContent();
         }
     }
 }

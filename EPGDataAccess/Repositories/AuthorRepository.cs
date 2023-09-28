@@ -38,12 +38,12 @@ namespace EPGApplication.Repositories.NormalRepositories
             Instance.SaveChanges();
             return author;
         }
-        public bool UpdateAuthor(Author oldAuthor, Author data)
+        public bool UpdateAuthor(Author oldAuthor, Author4Create data)
         {
-            oldAuthor = data;
+            var authorToUpdate = Instance.Authors.FirstOrDefault(a => a.Id == oldAuthor.Id);
+            Mapper.Map(data, authorToUpdate);
             Instance.SaveChanges();
-            if (GetAuthor(oldAuthor.Id) == data) return true;
-            return false;
+            return true;
         }
         public void DeleteAuthorWorks(Author author)
         {

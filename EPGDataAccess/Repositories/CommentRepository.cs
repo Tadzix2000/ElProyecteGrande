@@ -6,6 +6,7 @@ using EPGApplication.Repositories.IRepositories;
 using EPGApplication.DTOs.CreateUpdate;
 using EPGDataAccess;
 using Microsoft.EntityFrameworkCore;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace EPGApplication.Repositories.NormalRepositories
 {
@@ -30,9 +31,10 @@ namespace EPGApplication.Repositories.NormalRepositories
             Instance.SaveChanges();
             return Data;
         }
-        public bool UpdateComment(Comment? OldComment, Comment Data)
+        public bool UpdateComment(Comment OldComment, Comment4Create Data)
         {
-            OldComment = Data;
+            var commentToUpdate = Instance.Comments.FirstOrDefault(a => a.Id == OldComment.Id);
+            Mapper.Map(Data, commentToUpdate);
             Instance.SaveChanges();
             return true;
         }
