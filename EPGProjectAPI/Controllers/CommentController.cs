@@ -26,7 +26,13 @@ namespace EPGProjectAPI.Controllers
             this.service.GetMapper(this.mapper);
         }
         [HttpGet]
-        public ActionResult<List<CommentDTO>> GetAll([FromQuery] String? search)
+        public ActionResult<IEnumerable<CommentDTO>> GetAll(
+            [FromQuery] string? search,
+            [FromQuery] string? currentPage,
+            [FromQuery] string? pageSize,
+            [FromQuery] string? orderBy,
+            [FromQuery] bool? desc
+            )
         {
             var Comments = service.GetComments(repository);
             if (Comments is null) return NotFound();
@@ -40,7 +46,14 @@ namespace EPGProjectAPI.Controllers
             else return service.GetComment(Comment);
         }
         [HttpGet("{id:int}/responses")]
-        public ActionResult<IEnumerable<CommentDTO>> GetAllResponses(int id, [FromQuery] string? search)
+        public ActionResult<IEnumerable<CommentDTO>> GetAllResponses(
+            int id, 
+            [FromQuery] string? search,
+            [FromQuery] string? currentPage,
+            [FromQuery] string? pageSize,
+            [FromQuery] string? orderBy,
+            [FromQuery] bool? desc
+            )
         {
             var Comment = service.JustGetComment(id, repository);
             var Comments = service.GetResponsesFromComment(Comment, repository);

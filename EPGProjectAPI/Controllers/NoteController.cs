@@ -26,7 +26,11 @@ namespace EPGProjectAPI.Controllers
             this.service.GetMapper(this.mapper);
         }
         [HttpGet]
-        public ActionResult<List<NoteDTO>> GetAll([FromQuery] int? search)
+        public ActionResult<List<NoteDTO>> GetAll(
+            [FromQuery] string? currentPage,
+            [FromQuery] string? pageSize,
+            [FromQuery] string? orderBy,
+            [FromQuery] bool? desc)
         {
             var Notes = service.GetAllNotes(repository);
             if (Notes is null) return NotFound();

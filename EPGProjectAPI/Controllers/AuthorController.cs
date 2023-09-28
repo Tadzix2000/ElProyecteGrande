@@ -31,7 +31,15 @@ namespace EPGProjectAPI.Controllers
         //public IMemoryCache MemoryCache = new IMemoryCache();
         [HttpGet]
         [ResponseCache(CacheProfileName = "Any-60")]
-        public ActionResult<IEnumerable<AuthorDTO>> GetAll([FromQuery] String? search)
+        public ActionResult<IEnumerable<AuthorDTO>> GetAll(
+            [FromQuery] string? search,
+            [FromQuery] string? name,
+            [FromQuery] string? country,
+            [FromQuery] string? currentPage,
+            [FromQuery] string? pageSize,
+            [FromQuery] string? orderBy,
+            [FromQuery] bool? desc
+            )
         {
 
             var authors = service.GetAuthors(repository);
@@ -49,7 +57,14 @@ namespace EPGProjectAPI.Controllers
 
 
         [HttpGet("{id:int}/works")]
-        public ActionResult<IEnumerable<WorkDTO>> GetWorksFromAuthor(int id, [FromQuery] String? search)
+        public ActionResult<IEnumerable<WorkDTO>> GetWorksFromAuthor(
+            int id,
+            [FromQuery] string? search,
+            [FromQuery] string? currentPage,
+            [FromQuery] string? pageSize,
+            [FromQuery] string? orderBy,
+            [FromQuery] bool? desc
+            )
         {
             var author = service.JustGetAuthor(id, repository);
             if (author is null) return NotFound();

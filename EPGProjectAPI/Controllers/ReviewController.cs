@@ -26,7 +26,13 @@ namespace EPGProjectAPI.Controllers
             this.service.GetMapper(this.mapper);
         }
         [HttpGet]
-        public ActionResult<IEnumerable<ReviewDTO>> GetAll([FromQuery] string? search)
+        public ActionResult<IEnumerable<ReviewDTO>> GetAll(
+            [FromQuery] string? search,
+            [FromQuery] string? currentPage,
+            [FromQuery] string? pageSize,
+            [FromQuery] string? orderBy,
+            [FromQuery] bool? desc
+            )
         {
             var reviews = service.GetReviews(repository);
             if (reviews is null) return NotFound();
@@ -42,7 +48,14 @@ namespace EPGProjectAPI.Controllers
 
 
         [HttpGet("{id:int}/comments")]
-        public ActionResult<IEnumerable<CommentDTO>> GetCommentsFromReview(int id, [FromQuery] string? search)
+        public ActionResult<IEnumerable<CommentDTO>> GetCommentsFromReview(
+            int id,
+            [FromQuery] string? search,
+            [FromQuery] string? currentPage,
+            [FromQuery] string? pageSize,
+            [FromQuery] string? orderBy,
+            [FromQuery] bool? desc
+            )
         {
             var review = service.JustGetReview(id, repository);
             if (review is null) return NotFound();

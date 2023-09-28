@@ -25,6 +25,15 @@ namespace EPGDomain
         public DateTime PublicationDate { get; set; }
         public Work? OriginalWork { get; set; }
         public Author Author { get; set; }
+        public double GetAverageNote(List<int> noteValue)
+        {
+            return noteValue.Average(x => x);
+        }
+        public double GetForTopChart(List<int> notes, bool best)
+        {
+            var score = best? GetAverageNote(notes) * notes.Count() : (11 * GetAverageNote(notes)) * notes.Count;
+            return score;
+        }
         public bool VerifyNullables() =>
             Name != null &&
             Description != null &&

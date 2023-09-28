@@ -26,7 +26,13 @@ namespace EPGProjectAPI.Controllers
             this.service.GetMapper(this.mapper);
         }
         [HttpGet]
-        public ActionResult<IEnumerable<WorkDTO>> GetAll([FromQuery] String? search)
+        public ActionResult<IEnumerable<WorkDTO>> GetAll(
+            [FromQuery] string? search,
+            [FromQuery] string? currentPage,
+            [FromQuery] string? pageSize,
+            [FromQuery] string? orderBy,
+            [FromQuery] bool? desc
+            )
         {
             var works = service.GetWorks(repository);
             if (works == null) { return NotFound(); }
