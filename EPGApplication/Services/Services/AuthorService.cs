@@ -28,7 +28,6 @@ namespace EPGApplication.Services.Services
             foreach(var author in authors)
             {
                 var authorDTO = Mapper.Map<AuthorDTO>(author);
-                //authorDTO.AssignFeatures(this, author);
                 authorsDTO.Add(authorDTO);
             }
             return authorsDTO;

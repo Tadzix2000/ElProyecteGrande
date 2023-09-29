@@ -10,18 +10,16 @@ namespace EPGApplication.QueryConfigurations.QueryParameters
 {
     public class AuthorQueryParameters
     {
-        public string? name;
-        public int? year;
+        public (DateTime? earliestDate, DateTime? latestDate) DateBorders;
         public string? country;
         public string? search;
         public string? orderBy;
         public bool? desc;
         public int? currentPage;
         public int? pageSize;
-        public AuthorQueryParameters(string? name, int? year, string? country, string? search, string? orderBy, bool? desc, int? pageSize, int? currentPage)
+        public AuthorQueryParameters(DateTime? earliestDate, DateTime? latestDate, string? country, string? search, string? orderBy, bool? desc, int? pageSize, int? currentPage)
         {
-            this.name = name;
-            this.year = year;
+            this.DateBorders = (earliestDate, latestDate);
             this.country = country;
             this.search = search;
             this.orderBy = orderBy;

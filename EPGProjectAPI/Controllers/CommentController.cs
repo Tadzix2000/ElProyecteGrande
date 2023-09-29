@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using EPGApplication.Repositories.IRepositories;
 using EPGApplication.Services.IServices;
+using EPGApplication.QueryConfigurations.QueryParameters;
 
 namespace EPGProjectAPI.Controllers
 {
@@ -28,13 +29,16 @@ namespace EPGProjectAPI.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<CommentDTO>> GetAll(
             [FromQuery] string? search,
-            [FromQuery] string? currentPage,
-            [FromQuery] string? pageSize,
+            [FromQuery] DateTime? earliestDate,
+            [FromQuery] DateTime? latestDate,
+            [FromQuery] int? currentPage,
+            [FromQuery] int? pageSize,
             [FromQuery] string? orderBy,
             [FromQuery] bool? desc
             )
         {
-            var Comments = service.GetComments(repository);
+            CommentQueryParameters parameters = new(search, earliestDate, latestDate, currentPage, pageSize, orderBy, desc);
+            var Comments = service.GetComments(repository, parameters);
             if (Comments is null) return NotFound();
             else return Ok(Comments);
         }
@@ -47,16 +51,20 @@ namespace EPGProjectAPI.Controllers
         }
         [HttpGet("{id:int}/responses")]
         public ActionResult<IEnumerable<CommentDTO>> GetAllResponses(
-            int id, 
+            int id,
             [FromQuery] string? search,
-            [FromQuery] string? currentPage,
-            [FromQuery] string? pageSize,
+            [FromQuery] DateTime? earliestDate,
+            [FromQuery] DateTime? latestDate,
+            [FromQuery] int? currentPage,
+            [FromQuery] int? pageSize,
             [FromQuery] string? orderBy,
             [FromQuery] bool? desc
             )
         {
             var Comment = service.JustGetComment(id, repository);
-            var Comments = service.GetResponsesFromComment(Comment, repository);
+            if (Comment is null) return NotFound();
+            CommentQueryParameters parameters = new(search, earliestDate, latestDate, currentPage, pageSize, orderBy, desc);
+            var Comments = service.GetResponsesFromComment(Comment, repository, parameters);
             if (Comments is null) return NotFound();
             else return Comments;
         }

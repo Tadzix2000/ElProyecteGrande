@@ -2,6 +2,8 @@
 using EPGApplication.DTOs.CreateUpdate;
 using EPGApplication.Repositories.IRepositories;
 using EPGApplication.Repositories.NormalRepositories;
+using EPGApplication.QueryConfigurations.Objects4Queries;
+using EPGApplication.QueryConfigurations.QueryParameters;
 using EPGDomain;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -15,17 +17,23 @@ namespace EPGDataAccess.Repositories
     public class ReviewRepository : MainRepository, IReviewRepository
     {
         public ReviewRepository(DataInstance instance, IMapper mapper) : base(instance, mapper) { }
-        public List<Review>? GetReviews()
+        public List<Review>? GetReviews(ReviewQueryParameters parameters)
         {
-            return Instance.Reviews.Include(r => r.Work).ToList();
+            var query = Instance.Reviews.Include(r => r.Work).AsQueryable();
+            int itemCount = query.Count();
+            var queryManager = new Review4Query(parameters, itemCount, Mapper);
+            return queryManager.GetDesiredData(query);
         }
         public Review? GetReview(int id)
         {
             return Instance.Reviews.Include(r => r.Work).FirstOrDefault(r => r.Id == id);
         }
-        public List<Comment>? GetCommentsFromReview(Review review)
+        public List<Comment>? GetCommentsFromReview(Review review, CommentQueryParameters parameters)
         {
-            return Instance.Comments.Include(c => c.OriginalComment).Include(c => c.Review).Where(c => c.Review == review).ToList();
+            var query = Instance.Comments.Include(c => c.OriginalComment).Include(c => c.Review).Where(c => c.Review == review).AsQueryable();
+            int itemCount = query.Count();
+            var queryManager = new Comment4Query(parameters, itemCount, Mapper);
+            return queryManager.GetDesiredData(query);
         }
         public Review? CreateReview(Review review)
         {

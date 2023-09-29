@@ -8,12 +8,13 @@ using EPGApplication.DTOs.CreateUpdate;
 using EPGApplication.DTOs.Read;
 using EPGApplication.Repositories.IRepositories;
 using AutoMapper;
+using EPGApplication.QueryConfigurations.QueryParameters;
 
 namespace EPGApplication.Services.IServices
 {
     public interface INoteService
     {
-        List<NoteDTO>? GetAllNotes(INoteRepository repository);
+        List<NoteDTO>? GetAllNotes(INoteRepository repository, NoteQueryParameters parameters);
         Note? JustGetNote(int id, INoteRepository repository);
         NoteDTO? GetNote(Note note);
         NoteDTO? CreateNote(Note4Create note, INoteRepository repository);

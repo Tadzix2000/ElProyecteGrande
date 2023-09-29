@@ -10,7 +10,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using EPGApplication.QueryConfigurations.Objects4Queries;
+using EPGApplication.QueryConfigurations.QueryParameters;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace EPGDataAccess.Repositories
 {
@@ -29,13 +31,19 @@ namespace EPGDataAccess.Repositories
         {
             return Instance.Works.Where(w => w.OriginalWork == work).Include(w => w.Author).Include(w => w.OriginalWork).ToList();
         }
-        public List<Review>? GetReviews(Work work)
+        public List<Review>? GetReviews(Work work, ReviewQueryParameters parameters)
         {
-            return Instance.Reviews.Include(r => r.Work).Where(w => w.Work == work).ToList();
+            var query = Instance.Reviews.Include(r => r.Work).Where(w => w.Work == work).AsQueryable();
+            int itemCount = query.Count();
+            var queryManager = new Review4Query(parameters, itemCount, Mapper);
+            return queryManager.GetDesiredData(query);
         }
-        public List<Note>? GetNotes(Work work)
+        public List<Note>? GetNotes(Work work, NoteQueryParameters parameters)
         {
-            return Instance.Notes.Include(n => n.Work).Where(n => n.Work == work).ToList();
+            var query = Instance.Notes.Include(n => n.Work).Where(n => n.Work == work).AsQueryable();
+            int itemCount = query.Count();
+            var queryManager = new Note4Query(parameters, itemCount, Mapper);
+            return queryManager.GetDesiredData(query);
         }
         public Work? CreateWork(Work work)
         {

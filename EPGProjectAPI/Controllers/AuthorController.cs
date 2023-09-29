@@ -35,16 +35,16 @@ namespace EPGProjectAPI.Controllers
         //[ResponseCache(CacheProfileName = "Any-60")]
         public ActionResult<IEnumerable<AuthorDTO>> GetAll(
             [FromQuery] string? search,
-            [FromQuery] string? name,
             [FromQuery] string? country,
             [FromQuery] int? currentPage,
             [FromQuery] int? pageSize,
             [FromQuery] string? orderBy,
-            [FromQuery] int? year,
+            [FromQuery] DateTime? earliestDate,
+            [FromQuery] DateTime? latestDate,
             [FromQuery] bool? desc
             )
         {
-            AuthorQueryParameters parameters = new(name, year, country, search, orderBy, desc, pageSize, currentPage);
+            AuthorQueryParameters parameters = new(earliestDate, latestDate, country, search, orderBy, desc, pageSize, currentPage);
             var authors = service.GetAuthors(repository, parameters);
             if (authors == null) { return NotFound(); }
             return Ok(authors);

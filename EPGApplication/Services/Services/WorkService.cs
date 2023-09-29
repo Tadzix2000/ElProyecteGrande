@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EPGApplication.DTOs.CreateUpdate;
 using EPGApplication.DTOs.Read;
+using EPGApplication.QueryConfigurations.QueryParameters;
 using EPGApplication.Repositories.IRepositories;
 using EPGApplication.Services.IServices;
 using EPGDomain;
@@ -54,10 +55,10 @@ namespace EPGApplication.Services.Services
             }
             return translationsDTO;
         }
-        public List<ReviewDTO>? GetReviews(Work work, IWorkRepository repository)
+        public List<ReviewDTO>? GetReviews(Work work, IWorkRepository repository, ReviewQueryParameters parameters)
         {
             if (work is null) return null;
-            var reviews = repository.GetReviews(work);
+            var reviews = repository.GetReviews(work, parameters);
             if (reviews is null || reviews.Count() == 0) return null;
             var reviewsDTO = new List<ReviewDTO>();
             foreach(var review in reviews)
@@ -68,10 +69,10 @@ namespace EPGApplication.Services.Services
             }
             return reviewsDTO;
         }
-        public List<NoteDTO>? GetNotes(Work work, IWorkRepository repository)
+        public List<NoteDTO>? GetNotes(Work work, IWorkRepository repository, NoteQueryParameters parameters)
         {
             if (work is null) return null;
-            var notes = repository.GetNotes(work);
+            var notes = repository.GetNotes(work, parameters);
             if (notes is null || notes.Count() == 0) return null;
             var notesDTO = new List<NoteDTO>();
             foreach (var note in notes)

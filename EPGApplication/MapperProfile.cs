@@ -22,6 +22,9 @@ namespace EPGApplication
             CreateMap<Review4Create, Review>();
             CreateMap<Work4Create, Work>();
             CreateMap<AuthorQueryParameters, Author4Query>();
+            CreateMap<CommentQueryParameters, Comment4Query>();
+            CreateMap<NoteQueryParameters, Note4Query>();
+            CreateMap<ReviewQueryParameters, Review4Query>();
         }
     }
 }

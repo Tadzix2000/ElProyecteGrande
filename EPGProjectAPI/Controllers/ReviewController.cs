@@ -8,6 +8,7 @@ using EPGApplication.Services.Services;
 using AutoMapper;
 using EPGApplication.Repositories.IRepositories;
 using EPGApplication.Services.IServices;
+using EPGApplication.QueryConfigurations.QueryParameters;
 
 namespace EPGProjectAPI.Controllers
 {
@@ -28,13 +29,16 @@ namespace EPGProjectAPI.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<ReviewDTO>> GetAll(
             [FromQuery] string? search,
-            [FromQuery] string? currentPage,
-            [FromQuery] string? pageSize,
+            [FromQuery] DateTime? earliestDate,
+            [FromQuery] DateTime? latestDate,
+            [FromQuery] int? currentPage,
+            [FromQuery] int? pageSize,
             [FromQuery] string? orderBy,
             [FromQuery] bool? desc
             )
         {
-            var reviews = service.GetReviews(repository);
+            ReviewQueryParameters parameters = new(search, earliestDate, latestDate, currentPage, pageSize, orderBy, desc);
+            var reviews = service.GetReviews(repository, parameters);
             if (reviews is null) return NotFound();
             return Ok(reviews);
         }
@@ -51,15 +55,18 @@ namespace EPGProjectAPI.Controllers
         public ActionResult<IEnumerable<CommentDTO>> GetCommentsFromReview(
             int id,
             [FromQuery] string? search,
-            [FromQuery] string? currentPage,
-            [FromQuery] string? pageSize,
+            [FromQuery] DateTime? earliestDate,
+            [FromQuery] DateTime? latestDate,
+            [FromQuery] int? currentPage,
+            [FromQuery] int? pageSize,
             [FromQuery] string? orderBy,
             [FromQuery] bool? desc
             )
         {
             var review = service.JustGetReview(id, repository);
             if (review is null) return NotFound();
-            var comments = service.GetCommentsFromReview(review, repository);
+            CommentQueryParameters parameters = new(search, earliestDate, latestDate, currentPage, pageSize, orderBy, desc);
+            var comments = service.GetCommentsFromReview(review, repository, parameters);
             if (comments is null) return NotFound();
             return Ok(comments);
         }

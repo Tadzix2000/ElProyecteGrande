@@ -7,23 +7,31 @@ using EPGApplication.DTOs.CreateUpdate;
 using EPGDataAccess;
 using Microsoft.EntityFrameworkCore;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using EPGApplication.QueryConfigurations.Objects4Queries;
+using EPGApplication.QueryConfigurations.QueryParameters;
 
 namespace EPGApplication.Repositories.NormalRepositories
 {
     public class CommentRepository : MainRepository, ICommentRepository
     {
         public CommentRepository(DataInstance instance, IMapper mapper) : base(instance, mapper) { }
-        public List<Comment>? GetComments()
+        public List<Comment>? GetComments(CommentQueryParameters parameters)
         {
-            return Instance.Comments.Include(c => c.OriginalComment).Include(c => c.Review).ToList();
+            var query = Instance.Comments.Include(c => c.Review).Include(c => c.OriginalComment).AsQueryable();
+            int itemCount = query.Count();
+            var queryManager = new Comment4Query(parameters, itemCount, Mapper);
+            return queryManager.GetDesiredData(query);
         }
         public Comment? GetComment(int? id)
         {
             return Instance.Comments.Include(c => c.OriginalComment).Include(c => c.Review).FirstOrDefault(c => c.Id == id);
         }
-        public List<Comment>? GetResponsesFromComment(Comment? comment)
+        public List<Comment>? GetResponsesFromComment(Comment? comment, CommentQueryParameters parameters)
         {
-            return Instance.Comments.Include(c => c.OriginalComment).Include(c => c.Review).Where(c => c.OriginalComment == comment).ToList();
+            var query = Instance.Comments.Include(c => c.OriginalComment).Include(c => c.Review).Where(c => c.OriginalComment == comment).AsQueryable();
+            int itemCount = query.Count();
+            var queryManager = new Comment4Query(parameters, itemCount, Mapper);
+            return queryManager.GetDesiredData(query);
         }
         public Comment? CreateComment(Comment? Data)
         {

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using EPGApplication.Repositories.IRepositories;
 using EPGDomain;
+using EPGApplication.QueryConfigurations.QueryParameters;
 
 namespace EPGApplication.Services.Services
 {
@@ -16,11 +17,10 @@ namespace EPGApplication.Services.Services
     {
         public IMapper Mapper;
 
-        public List<NoteDTO>? GetAllNotes(INoteRepository repository)
+        public List<NoteDTO>? GetAllNotes(INoteRepository repository, NoteQueryParameters parameters)
         {
-            var Notes = repository.GetNotes();
+            var Notes = repository.GetNotes(parameters);
             if (Notes is null || Notes.Count() == 0) return null;
-            // var Notes = QueryCenter.SearchNotes(Notes)
             var NotesDTO = new List<NoteDTO>();
             foreach (var Note in Notes)
             {

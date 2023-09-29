@@ -8,6 +8,7 @@ using EPGDataAccess;
 using AutoMapper;
 using EPGApplication.Repositories.IRepositories;
 using EPGApplication.Services.IServices;
+using EPGApplication.QueryConfigurations.QueryParameters;
 
 namespace EPGProjectAPI.Controllers
 {
@@ -27,12 +28,18 @@ namespace EPGProjectAPI.Controllers
         }
         [HttpGet]
         public ActionResult<List<NoteDTO>> GetAll(
-            [FromQuery] string? currentPage,
-            [FromQuery] string? pageSize,
+            [FromQuery] int? minValue,
+            [FromQuery] int? maxValue,
+            [FromQuery] DateTime? earliestDate,
+            [FromQuery] DateTime? latestDate,
+            [FromQuery] int? currentPage,
+            [FromQuery] int? pageSize,
             [FromQuery] string? orderBy,
-            [FromQuery] bool? desc)
+            [FromQuery] bool? desc
+            )
         {
-            var Notes = service.GetAllNotes(repository);
+            NoteQueryParameters parameters = new(minValue, maxValue, earliestDate, latestDate, currentPage, pageSize, orderBy, desc);
+            var Notes = service.GetAllNotes(repository, parameters);
             if (Notes is null) return NotFound();
             return Ok(Notes);
         }

@@ -25,13 +25,14 @@ namespace EPGDomain
         public DateTime PublicationDate { get; set; }
         public Work? OriginalWork { get; set; }
         public Author Author { get; set; }
-        public double GetAverageNote(List<int> noteValue)
+        public double GetAverageNote(List<Note> noteValue)
         {
-            return noteValue.Average(x => x);
+            return noteValue.Average(x => x.NoteNumber);
         }
-        public double GetForTopChart(List<int> notes, bool best)
+        public double GetForTopChart(List<Note> notes, double? popularityWeight)
         {
-            var score = best? GetAverageNote(notes) * notes.Count() : (11 * GetAverageNote(notes)) * notes.Count;
+            if (popularityWeight == null || popularityWeight > 1 || popularityWeight < 0) popularityWeight = 1;
+            var score = GetAverageNote(notes) * (1 + ((double)popularityWeight * notes.Count()));
             return score;
         }
         public bool VerifyNullables() =>

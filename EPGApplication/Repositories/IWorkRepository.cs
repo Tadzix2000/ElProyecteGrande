@@ -1,5 +1,6 @@
 ﻿using EPGApplication.DTOs.CreateUpdate;
 using EPGApplication.DTOs.Read;
+using EPGApplication.QueryConfigurations.QueryParameters;
 using EPGDomain;
 using System;
 using System.Collections.Generic;
@@ -14,8 +15,8 @@ namespace EPGApplication.Repositories.IRepositories
         public List<Work> GetWorks();
         public Work GetWork(int id);
         public List<Work> GetTranslations(Work work);
-        public List<Review> GetReviews(Work work);
-        public List<Note> GetNotes(Work work);
+        public List<Review> GetReviews(Work work, ReviewQueryParameters parameters);
+        public List<Note> GetNotes(Work work, NoteQueryParameters parameters);
         public Work CreateWork(Work work);
         public bool UpdateWork(Work oldWork, Work4Create data);
         public void DeleteWorkTranslations(Work work);

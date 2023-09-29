@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EPGApplication.DTOs.CreateUpdate;
 using EPGApplication.DTOs.Read;
+using EPGApplication.QueryConfigurations.QueryParameters;
 using EPGApplication.Repositories.IRepositories;
 using EPGApplication.Services.IServices;
 using EPGDomain;
@@ -18,9 +19,9 @@ namespace EPGApplication.Services.Services
         public IMapper Mapper;
 
 
-        public List<ReviewDTO>? GetReviews(IReviewRepository repository)
+        public List<ReviewDTO>? GetReviews(IReviewRepository repository, ReviewQueryParameters parameters)
         {
-            var Reviews = repository.GetReviews();
+            var Reviews = repository.GetReviews(parameters);
             if (Reviews is null || Reviews.Count() == 0) return null;
             var ReviewsDTO = new List<ReviewDTO>();
             foreach (var Review in Reviews)
@@ -42,10 +43,10 @@ namespace EPGApplication.Services.Services
             //ReviewDTO.AssignFeatures(this, review);
             return ReviewDTO;
         }
-        public List<CommentDTO>? GetCommentsFromReview(Review review, IReviewRepository repository)
+        public List<CommentDTO>? GetCommentsFromReview(Review review, IReviewRepository repository, CommentQueryParameters parameters)
         {
             if (review == null) return null;
-            var reviewComments = repository.GetCommentsFromReview(review);
+            var reviewComments = repository.GetCommentsFromReview(review, parameters);
             if (reviewComments is null) return null;
             var comments = new List<CommentDTO>();
             foreach(var Comment in reviewComments)

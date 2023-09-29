@@ -12,8 +12,7 @@ namespace EPGApplication.QueryConfigurations.Objects4Queries
 {
     public class Author4Query
     {
-        public string? name;
-        public int? year;
+        public (DateTime? earliestDate, DateTime? latestDate) DateBorders;
         public string? country;
         public string? search;
         public PaginationMetadata pagination;
@@ -27,8 +26,7 @@ namespace EPGApplication.QueryConfigurations.Objects4Queries
         }
         public List<Author> GetDesiredData(IQueryable<Author> query)
         {
-            query = name == null ? query : query.Where(a => a.Name == name);
-            query = year == null ? query : query.Where(a => a.CreationDate.Year == year);
+            query = DateBorders.latestDate == null || DateBorders.earliestDate == null || DateBorders.earliestDate > DateBorders.latestDate ? query : query.Where(a => a.CreationDate >= DateBorders.earliestDate && a.CreationDate <= DateBorders.latestDate);
             query = country == null ? query : query.Where(a => a.Country == country);
             query = search == null ? query : query.Where(a => a.Name.Contains(search) || a.Description.Contains(search) || a.FurtherLinks.Contains(search));
             if (orderBy != null)

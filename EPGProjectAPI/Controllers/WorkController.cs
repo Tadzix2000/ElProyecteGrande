@@ -8,6 +8,7 @@ using EPGApplication.Services.Services;
 using AutoMapper;
 using EPGApplication.Repositories.IRepositories;
 using EPGApplication.Services.IServices;
+using EPGApplication.QueryConfigurations.QueryParameters;
 
 namespace EPGProjectAPI.Controllers
 {
@@ -48,11 +49,20 @@ namespace EPGProjectAPI.Controllers
 
 
         [HttpGet("{id:int}/notes")]
-        public ActionResult<IEnumerable<NoteDTO>> GetNotesByWork(int id, [FromQuery] int? search)
+        public ActionResult<IEnumerable<NoteDTO>> GetNotesByWork(int id, 
+            [FromQuery] int? minValue,
+            [FromQuery] int? maxValue,
+            [FromQuery] DateTime? earliestDate,
+            [FromQuery] DateTime? latestDate,
+            [FromQuery] int? currentPage,
+            [FromQuery] int? pageSize,
+            [FromQuery] string? orderBy,
+            [FromQuery] bool? desc)
         {
             var work = service.JustGetWork(id, repository);
             if (work is null) return NotFound();
-            var notes = service.GetNotes(work, repository);
+            NoteQueryParameters parameters = new(minValue, maxValue, earliestDate, latestDate, currentPage, pageSize, orderBy, desc);
+            var notes = service.GetNotes(work, repository, parameters);
             if (notes is null) return NotFound();
             return Ok(notes);
         }
@@ -66,11 +76,18 @@ namespace EPGProjectAPI.Controllers
             return Ok(translations);
         }
         [HttpGet("{id:int}/reviews")]
-        public ActionResult<IEnumerable<ReviewDTO>> GetReviewsByWork(int id, [FromQuery] String? search)
+        public ActionResult<IEnumerable<ReviewDTO>> GetReviewsByWork(int id, [FromQuery] string? search,
+            [FromQuery] DateTime? earliestDate,
+            [FromQuery] DateTime? latestDate,
+            [FromQuery] int? currentPage,
+            [FromQuery] int? pageSize,
+            [FromQuery] string? orderBy,
+            [FromQuery] bool? desc)
         {
             var work = service.JustGetWork(id, repository);
             if (work is null) return NotFound();
-            var reviews = service.GetReviews(work, repository);
+            ReviewQueryParameters parameters = new(search, earliestDate, latestDate, currentPage, pageSize, orderBy, desc);
+            var reviews = service.GetReviews(work, repository, parameters);
             if (reviews is null) return NotFound();
             return Ok(reviews);
         }

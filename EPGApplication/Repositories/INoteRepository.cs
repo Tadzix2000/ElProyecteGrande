@@ -5,12 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EPGApplication.DTOs.CreateUpdate;
+using EPGApplication.QueryConfigurations.QueryParameters;
 
 namespace EPGApplication.Repositories.IRepositories
 {
     public interface INoteRepository
     {
-        public List<Note>? GetNotes();
+        public List<Note>? GetNotes(NoteQueryParameters parameters);
         public Note? GetNote(int id);
         public Note? CreateNote(Note Data);
         public bool UpdateNote(Note oldNote, Note4Create Data);

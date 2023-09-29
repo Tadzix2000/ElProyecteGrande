@@ -2,6 +2,7 @@
 using EPGApplication.DTOs.CreateUpdate;
 using EPGApplication.DTOs.Read;
 using EPGApplication.Repositories.IRepositories;
+using EPGApplication.QueryConfigurations.QueryParameters;
 using EPGApplication.Services.IServices;
 using EPGDomain;
 using System;
@@ -17,16 +18,14 @@ namespace EPGApplication.Services.Services
     {
         public IMapper Mapper;
 
-        public List<CommentDTO>? GetComments(ICommentRepository repository)
+        public List<CommentDTO>? GetComments(ICommentRepository repository, CommentQueryParameters parameters)
         {
-            var Result = repository.GetComments();
+            var Result = repository.GetComments(parameters);
             if (Result is null || Result.Count() == 0) return null;
-            // var Result = QueryCenter.SearchComments(Result)
             var ResultDTO = new List<CommentDTO>();
             foreach (var Comment in Result)
             {
                 var CommentDTO = Mapper.Map<CommentDTO>(Comment);
-                //CommentDTO.AssignFeatures(this, Comment);
                 ResultDTO.Add(CommentDTO);
             }
             return ResultDTO;
@@ -42,9 +41,9 @@ namespace EPGApplication.Services.Services
         {
             return repository.GetComment(id);
         }
-        public List<CommentDTO>? GetResponsesFromComment(Comment comment, ICommentRepository repository)
+        public List<CommentDTO>? GetResponsesFromComment(Comment comment, ICommentRepository repository, CommentQueryParameters parameters)
         {
-            var Responses = repository.GetResponsesFromComment(comment);
+            var Responses = repository.GetResponsesFromComment(comment, parameters);
             if (Responses is null) return null;
             var ResultDTO = new List<CommentDTO>();
             foreach(var response in ResultDTO)
