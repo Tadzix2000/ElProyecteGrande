@@ -11,6 +11,8 @@ using EPGApplication.Services.IServices;
 using EPGApplication.Services.Services;
 using AutoMapper;
 using EPGApplication.Repositories.IRepositories;
+using EPGApplication.QueryConfigurations.Objects4Queries;
+using EPGApplication.QueryConfigurations.QueryParameters;
 
 namespace EPGProjectAPI.Controllers
 {
@@ -30,19 +32,20 @@ namespace EPGProjectAPI.Controllers
         }
         //public IMemoryCache MemoryCache = new IMemoryCache();
         [HttpGet]
-        [ResponseCache(CacheProfileName = "Any-60")]
+        //[ResponseCache(CacheProfileName = "Any-60")]
         public ActionResult<IEnumerable<AuthorDTO>> GetAll(
             [FromQuery] string? search,
             [FromQuery] string? name,
             [FromQuery] string? country,
-            [FromQuery] string? currentPage,
-            [FromQuery] string? pageSize,
+            [FromQuery] int? currentPage,
+            [FromQuery] int? pageSize,
             [FromQuery] string? orderBy,
+            [FromQuery] int? year,
             [FromQuery] bool? desc
             )
         {
-
-            var authors = service.GetAuthors(repository);
+            AuthorQueryParameters parameters = new(name, year, country, search, orderBy, desc, pageSize, currentPage);
+            var authors = service.GetAuthors(repository, parameters);
             if (authors == null) { return NotFound(); }
             return Ok(authors);
 
@@ -60,8 +63,8 @@ namespace EPGProjectAPI.Controllers
         public ActionResult<IEnumerable<WorkDTO>> GetWorksFromAuthor(
             int id,
             [FromQuery] string? search,
-            [FromQuery] string? currentPage,
-            [FromQuery] string? pageSize,
+            [FromQuery] int? currentPage,
+            [FromQuery] int? pageSize,
             [FromQuery] string? orderBy,
             [FromQuery] bool? desc
             )

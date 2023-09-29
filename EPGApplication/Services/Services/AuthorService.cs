@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using EPGApplication.Repositories.IRepositories;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using EPGApplication.QueryConfigurations.QueryParameters;
 
 namespace EPGApplication.Services.Services
 {
@@ -19,9 +20,9 @@ namespace EPGApplication.Services.Services
         public IMapper Mapper;
 
 
-        public List<AuthorDTO>? GetAuthors(IAuthorRepository repository)
+        public List<AuthorDTO>? GetAuthors(IAuthorRepository repository, AuthorQueryParameters parameters)
         {
-            var authors = repository.GetAuthors();
+            var authors = repository.GetAuthors(parameters);
             if (authors is null || authors.Count == 0) return null;
             var authorsDTO = new List<AuthorDTO>();
             foreach(var author in authors)

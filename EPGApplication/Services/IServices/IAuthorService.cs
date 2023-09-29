@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EPGApplication.DTOs.CreateUpdate;
 using EPGApplication.DTOs.Read;
+using EPGApplication.QueryConfigurations.QueryParameters;
 using EPGApplication.Repositories.IRepositories;
 using EPGDomain;
 using System;
@@ -13,7 +14,7 @@ namespace EPGApplication.Services.IServices
 {
     public interface IAuthorService
     {
-        public List<AuthorDTO>? GetAuthors(IAuthorRepository repository);
+        public List<AuthorDTO>? GetAuthors(IAuthorRepository repository, AuthorQueryParameters parameters);
         public AuthorDTO? GetAuthor(Author author);
         public Author? JustGetAuthor(int id, IAuthorRepository repository);
         public List<WorkDTO>? GetWorks(Author author, IAuthorRepository repository);

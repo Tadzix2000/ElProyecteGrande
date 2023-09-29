@@ -11,6 +11,8 @@ using EPGDataAccess.Repositories;
 using EPGDomain;
 using EPGApplication.DTOs.CreateUpdate;
 using Microsoft.EntityFrameworkCore;
+using EPGApplication.QueryConfigurations.Objects4Queries;
+using EPGApplication.QueryConfigurations.QueryParameters;
 
 namespace EPGApplication.Repositories.NormalRepositories
 {
@@ -20,9 +22,12 @@ namespace EPGApplication.Repositories.NormalRepositories
         {
         }
 
-        public List<Author>? GetAuthors()
+        public List<Author>? GetAuthors(AuthorQueryParameters parameters)
         {
-            return Instance.Authors.ToList();
+            var query = Instance.Authors.AsQueryable();
+            int itemCount = query.Count();
+            var queryManager = new Author4Query(parameters, itemCount, Mapper);
+            return queryManager.GetDesiredData(query);
         }
         public Author? GetAuthor(int id)
         {

@@ -2,6 +2,8 @@
 using EPGDomain;
 using EPGApplication.DTOs.Read;
 using EPGApplication.DTOs.CreateUpdate;
+using EPGApplication.QueryConfigurations.Objects4Queries;
+using EPGApplication.QueryConfigurations.QueryParameters;
 
 namespace EPGApplication
 {
@@ -19,6 +21,7 @@ namespace EPGApplication
             CreateMap<Note4Create, Note>();
             CreateMap<Review4Create, Review>();
             CreateMap<Work4Create, Work>();
+            CreateMap<AuthorQueryParameters, Author4Query>();
         }
     }
 }
