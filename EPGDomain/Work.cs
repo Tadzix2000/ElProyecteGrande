@@ -25,9 +25,9 @@ namespace EPGDomain
         public DateTime PublicationDate { get; set; }
         public Work? OriginalWork { get; set; }
         public Author Author { get; set; }
-        public double GetAverageNote(List<Note> noteValue)
+        public double GetAverageNote(List<Note> notes)
         {
-            return noteValue.Average(x => x.NoteNumber);
+            return notes.Average(x => x.NoteNumber);
         }
         public double GetForTopChart(List<Note> notes, double? popularityWeight)
         {

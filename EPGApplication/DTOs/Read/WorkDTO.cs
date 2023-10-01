@@ -21,6 +21,7 @@ namespace EPGApplication.DTOs.Read
         public DateTime ReleaseDate { get; set; }
         public DateTime PublicationDate { get; set; }
         public WorkDTO? OriginalWork { get; set; }
+        public double? AverageNote { get; set; }
         public AuthorDTO Author { get; set; }
         //public List<NoteDTO>? Notes { get; set; }
         //public List<ReviewDTO>? Reviews { get; set; }

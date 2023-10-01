@@ -29,10 +29,20 @@ namespace EPGProjectAPI.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<WorkDTO>> GetAll(
             [FromQuery] string? search,
-            [FromQuery] string? currentPage,
-            [FromQuery] string? pageSize,
+            [FromQuery] DateTime? earliestRealeaseDate,
+            [FromQuery] DateTime? latestReleaseDate,
+            [FromQuery] DateTime? earliestPublicationDate,
+            [FromQuery] DateTime? latestPublicationDate,
+            [FromQuery] DateTime? earliestNoteDate,
+            [FromQuery] DateTime? latestNoteDate,
+            [FromQuery] double? popularityWeight,
+            [FromQuery] string? language,
+            [FromQuery] bool? searchTranslations,
+            [FromQuery] int? currentPage,
+            [FromQuery] int? pageSize,
             [FromQuery] string? orderBy,
-            [FromQuery] bool? desc
+            [FromQuery] bool? desc,
+            [FromQuery] bool? averageNotesWithTranslations
             )
         {
             var works = service.GetWorks(repository);
@@ -49,7 +59,8 @@ namespace EPGProjectAPI.Controllers
 
 
         [HttpGet("{id:int}/notes")]
-        public ActionResult<IEnumerable<NoteDTO>> GetNotesByWork(int id, 
+        public ActionResult<IEnumerable<NoteDTO>> GetNotesByWork(
+            int id, 
             [FromQuery] int? minValue,
             [FromQuery] int? maxValue,
             [FromQuery] DateTime? earliestDate,
@@ -57,7 +68,8 @@ namespace EPGProjectAPI.Controllers
             [FromQuery] int? currentPage,
             [FromQuery] int? pageSize,
             [FromQuery] string? orderBy,
-            [FromQuery] bool? desc)
+            [FromQuery] bool? desc
+            )
         {
             var work = service.JustGetWork(id, repository);
             if (work is null) return NotFound();

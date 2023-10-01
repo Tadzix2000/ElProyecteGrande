@@ -14,13 +14,21 @@ namespace EPGApplication.QueryConfigurations.Objects4Queries
     {
         public (int? minValue, int? maxValue) ValueRange;
         public (DateTime? earliestDate, DateTime? latestDate) DateBorders;
-        public PaginationMetadata pagination;
+        public PaginationMetadata? pagination;
         public string? orderBy;
         public bool? desc;
         public Note4Query(NoteQueryParameters parameters, int totalItemCount, IMapper mapper)
         {
             mapper.Map(parameters, this);
             pagination = new PaginationMetadata(totalItemCount, parameters.currentPage, parameters.pageSize);
+        }
+        public Note4Query(WorkQueryParameters parameters)
+        {
+            this.DateBorders = parameters.noteRange;
+            orderBy = null;
+            desc = null;
+            pagination = null;
+            ValueRange = (null, null);
         }
         public List<Note> GetDesiredData(IQueryable<Note> query)
         {
@@ -37,7 +45,7 @@ namespace EPGApplication.QueryConfigurations.Objects4Queries
                     query = desc == true ? query.OrderByDescending(n => n.NoteNumber) : query.OrderBy(n => n.NoteNumber);
                 }
             }
-            query = query.Skip((int)((pagination.currentPage - 1) * pagination.pageSize)).Take((int)pagination.pageSize);
+            if (pagination != null) query = query.Skip((int)((pagination.currentPage - 1) * pagination.pageSize)).Take((int)pagination.pageSize);
             return query.ToList();
         }
     }
