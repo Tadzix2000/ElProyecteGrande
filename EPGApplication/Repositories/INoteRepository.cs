@@ -11,11 +11,11 @@ namespace EPGApplication.Repositories.IRepositories
 {
     public interface INoteRepository
     {
-        public List<Note>? GetNotes(NoteQueryParameters parameters);
-        public Note? GetNote(int id);
-        public Note? CreateNote(Note Data);
-        public bool UpdateNote(Note oldNote, Note4Create Data);
-        public bool DeleteNote(Note Note);
-        public void GetSuperiorObjects(Note4Create data, Note note);
+        public async Task<List<Note>?> GetNotes(NoteQueryParameters parameters);
+        public async Task<Note?> GetNote(int id);
+        public async Task<Note?> CreateNote(Note Data);
+        public async Task<bool> UpdateNote(Note oldNote, Note4Create Data);
+        public async Task<bool> DeleteNote(Note Note);
+        public async Task<void> GetSuperiorObjects(Note4Create data, Note note);
     }
 }

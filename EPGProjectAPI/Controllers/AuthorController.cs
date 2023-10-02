@@ -33,7 +33,7 @@ namespace EPGProjectAPI.Controllers
         //public IMemoryCache MemoryCache = new IMemoryCache();
         [HttpGet]
         //[ResponseCache(CacheProfileName = "Any-60")]
-        public ActionResult<IEnumerable<AuthorDTO>> GetAll(
+        public async Task<ActionResult<IEnumerable<AuthorDTO>>> GetAll(
             [FromQuery] string? search,
             [FromQuery] string? country,
             [FromQuery] int? currentPage,
@@ -45,22 +45,22 @@ namespace EPGProjectAPI.Controllers
             )
         {
             AuthorQueryParameters parameters = new(earliestDate, latestDate, country, search, orderBy, desc, pageSize, currentPage);
-            var authors = service.GetAuthors(repository, parameters);
+            var authors = await service.GetAuthors(repository, parameters);
             if (authors == null) { return NotFound(); }
             return Ok(authors);
 
         }
         [HttpGet("{id:int}")]
-        public ActionResult<AuthorDTO> GetOne(int id)
+        public async Task<ActionResult<AuthorDTO>> GetOne(int id)
         {
-            var author = service.JustGetAuthor(id, repository);
+            var author = await service.JustGetAuthor(id, repository);
             if (author is null) return NotFound();
             return Ok(service.GetAuthor(author));
         }
 
 
         [HttpGet("{id:int}/works")]
-        public ActionResult<IEnumerable<WorkDTO>> GetWorksFromAuthor(
+        public async Task<ActionResult<IEnumerable<WorkDTO>>> GetWorksFromAuthor(
             int id,
             [FromQuery] string? search,
             [FromQuery] int? currentPage,
@@ -69,17 +69,17 @@ namespace EPGProjectAPI.Controllers
             [FromQuery] bool? desc
             )
         {
-            var author = service.JustGetAuthor(id, repository);
+            var author = await service.JustGetAuthor(id, repository);
             if (author is null) return NotFound();
-            var works = service.GetWorks(author, repository);
+            var works = await service.GetWorks(author, repository);
             if (works is null) return NotFound();
             return Ok(works);
         }
 
         [HttpPost]
-        public IActionResult CreateAuthor([FromBody] Author4Create author4Create)
+        public async Task<IActionResult> CreateAuthor([FromBody] Author4Create author4Create)
         {
-            var newAuthor = service.CreateAuthor(author4Create, repository);
+            var newAuthor = await service.CreateAuthor(author4Create, repository);
             if (newAuthor is null) return BadRequest();
             return CreatedAtAction(nameof(GetOne), new { id = newAuthor.Id }, newAuthor);
         }

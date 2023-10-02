@@ -20,9 +20,9 @@ namespace EPGApplication.Services.Services
         public IMapper Mapper;
 
 
-        public List<AuthorDTO>? GetAuthors(IAuthorRepository repository, AuthorQueryParameters parameters)
+        public async Task<List<AuthorDTO>?> GetAuthors(IAuthorRepository repository, AuthorQueryParameters parameters)
         {
-            var authors = repository.GetAuthors(parameters);
+            var authors = await repository.GetAuthors(parameters);
             if (authors is null || authors.Count == 0) return null;
             var authorsDTO = new List<AuthorDTO>();
             foreach(var author in authors)
@@ -32,20 +32,20 @@ namespace EPGApplication.Services.Services
             }
             return authorsDTO;
         }
-        public AuthorDTO? GetAuthor(Author author)
+        publi AuthorDTO? GetAuthor(Author author)
         {
             if (author is null) return null;
             var authorDTO = Mapper.Map<AuthorDTO>(author);
             return authorDTO;
         }
-        public Author? JustGetAuthor(int id, IAuthorRepository repository)
+        public async Task<Author?> (int id, IAuthorRepository repository)
         {
-            return repository.GetAuthor(id);
+            return await repository.GetAuthor(id);
         }
-        public List<WorkDTO>? GetWorks(Author author, IAuthorRepository repository)
+        public async Task<List<WorkDTO>?? GetWorks(Author author, IAuthorRepository repository)
         {
             if (author is null) return null;
-            var works = repository.GetWorksFromAuthor(author);
+            var works = await repository.GetWorksFromAuthor(author);
             if (works is null || works.Count() == 0) return null;
             var worksDTO = new List<WorkDTO>();
             foreach (var work in works)
@@ -56,27 +56,27 @@ namespace EPGApplication.Services.Services
             }
             return worksDTO;
         }
-        public AuthorDTO? CreateAuthor(Author4Create author, IAuthorRepository repository)
+        public async Task<AuthorDTO?> CreateAuthor(Author4Create author, IAuthorRepository repository)
         {
             var newAuthor = Mapper.Map<Author>(author);
-            repository.GetSuperiorObjects(author, newAuthor);
+            await repository.GetSuperiorObjects(author, newAuthor);
             if (!newAuthor.VerifyNullables()) return null;
-            newAuthor = repository.CreateAuthor(newAuthor);
+            newAuthor = await repository.CreateAuthor(newAuthor);
             if (newAuthor is null) return null;
             return Mapper.Map<AuthorDTO>(newAuthor);
         }
-        public AuthorDTO? UpdateAuthor(Author4Create data, Author oldAuthor, IAuthorRepository repository)
+        public async Task<AuthorDTO?> UpdateAuthor(Author4Create data, Author oldAuthor, IAuthorRepository repository)
         {
             var Author = Mapper.Map<Author>(data);
-            repository.UpdateAuthor(oldAuthor, data);
-            repository.GetSuperiorObjects(data, Author);
+            var update = await repository.UpdateAuthor(oldAuthor, data);
+            await repository.GetSuperiorObjects(data, Author);
             if (!Author.VerifyNullables()) return null;
-            if (repository.UpdateAuthor(oldAuthor, data)) return Mapper.Map<AuthorDTO>(oldAuthor);
+            if (update) return Mapper.Map<AuthorDTO>(oldAuthor);
             return null;
         }
-        public AuthorDTO? DeleteAuthor(Author author, IAuthorRepository repository)
+        public async Task<AuthorDTO?> DeleteAuthor(Author author, IAuthorRepository repository)
         {
-            if (repository.DeleteAuthor(author)) return Mapper.Map<AuthorDTO>(author);
+            if (await repository.DeleteAuthor(author)) return Mapper.Map<AuthorDTO>(author);
             return null;
         }
         public void GetMapper(IMapper mapper)

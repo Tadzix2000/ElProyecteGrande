@@ -14,13 +14,13 @@ namespace EPGApplication.Repositories.IRepositories
 {
     public interface IAuthorRepository
     {
-        public List<Author>? GetAuthors(AuthorQueryParameters parameters);
-        public Author? GetAuthor(int id);
-        public List<Work>? GetWorksFromAuthor(Author author);
+        public async Task<List<Author>?> GetAuthors(AuthorQueryParameters parameters);
+        public async Task<Author?> GetAuthor(int id);
+        public async Task<List<Work>?> GetWorksFromAuthor(Author author);
         public Author? CreateAuthor(Author author);
-        public bool UpdateAuthor(Author oldAuthor, Author4Create data);
-        public void DeleteAuthorWorks(Author author);
-        public bool DeleteAuthor(Author author);
-        public void GetSuperiorObjects(Author4Create data, Author author);
+        public async Task<bool> UpdateAuthor(Author oldAuthor, Author4Create data);
+        public async Task<void> DeleteAuthorWorks(Author author);
+        public async Task<bool> DeleteAuthor(Author author);
+        public async Task<void> GetSuperiorObjects(Author4Create data, Author author);
     }
 }

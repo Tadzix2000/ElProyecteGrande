@@ -15,57 +15,57 @@ namespace EPGApplication.Repositories.NormalRepositories
     public class CommentRepository : MainRepository, ICommentRepository
     {
         public CommentRepository(DataInstance instance, IMapper mapper) : base(instance, mapper) { }
-        public List<Comment>? GetComments(CommentQueryParameters parameters)
+        public async Task<List<Comment>?> GetComments(CommentQueryParameters parameters)
         {
-            var query = Instance.Comments.Include(c => c.Review).Include(c => c.OriginalComment).AsQueryable();
-            int itemCount = query.Count();
+            var query = await Instance.Comments.Include(c => c.Review).Include(c => c.OriginalComment).AsQueryable();
+            int itemCount = await query.Count();
             var queryManager = new Comment4Query(parameters, itemCount, Mapper);
-            return queryManager.GetDesiredData(query);
+            return await queryManager.GetDesiredData(query);
         }
-        public Comment? GetComment(int? id)
+        public Task<Comment?> GetComment(int? id)
         {
-            return Instance.Comments.Include(c => c.OriginalComment).Include(c => c.Review).FirstOrDefault(c => c.Id == id);
+            return Instance.Comments.Include(c => c.OriginalComment).Include(c => c.Review).FirstOrDefaultAsync(c => c.Id == id);
         }
-        public List<Comment>? GetResponsesFromComment(Comment? comment, CommentQueryParameters parameters)
+        public Task<List<Comment>?> GetResponsesFromComment(Comment? comment, CommentQueryParameters parameters)
         {
-            var query = Instance.Comments.Include(c => c.OriginalComment).Include(c => c.Review).Where(c => c.OriginalComment == comment).AsQueryable();
-            int itemCount = query.Count();
+            var query = await Instance.Comments.Include(c => c.OriginalComment).Include(c => c.Review).Where(c => c.OriginalComment == comment).AsQueryable();
+            int itemCount = await query.Count();
             var queryManager = new Comment4Query(parameters, itemCount, Mapper);
-            return queryManager.GetDesiredData(query);
+            return await queryManager.GetDesiredData(query);
         }
-        public Comment? CreateComment(Comment? Data)
+        public async Task<Comment?> CreateComment(Comment? Data)
         {
-            Instance.Comments.Add(Data);
-            Instance.SaveChanges();
+            await Instance.Comments.AddAsync(Data);
+            await Instance.SaveChangesAsync();
             return Data;
         }
-        public bool UpdateComment(Comment OldComment, Comment4Create Data)
+        public async Task<bool> UpdateComment(Comment OldComment, Comment4Create Data)
         {
-            var commentToUpdate = Instance.Comments.FirstOrDefault(a => a.Id == OldComment.Id);
+            var commentToUpdate = await Instance.Comments.FirstOrDefaultAsync(a => a.Id == OldComment.Id);
             Mapper.Map(Data, commentToUpdate);
-            Instance.SaveChanges();
+            await Instance.SaveChangesAsync();
             return true;
         }
-        public void DeleteCommentResponses(Comment comment)
+        public async Task<void> DeleteCommentResponses(Comment comment)
         {
-                Instance.Comments.RemoveRange(Instance.Comments.Where(c => c.OriginalComment == comment));
-                Instance.SaveChanges();
+                await Instance.Comments.RemoveRangeAsync(Instance.Comments.Where(c => c.OriginalComment == comment));
+                await Instance.SaveChangesAsync();
         }
-        public bool DeleteComment(Comment? comment)
+        public async Task<bool> DeleteComment(Comment? comment)
         {
             if (comment != null)
             {
-                DeleteCommentResponses(comment);
-                Instance.Remove(comment);
-                Instance.SaveChanges();
+                await DeleteCommentResponses(comment);
+                await Instance.RemoveAsync(comment);
+                await Instance.SaveChangesAsync();
                 return true;
             }
             return false;
         }
         public void GetSuperiorObjects(Comment4Create data, Comment comment)
         {
-            comment.Review = Instance.Reviews.Include(r => r.Work).FirstOrDefault(r => r.Id == data.ReviewId);
-            comment.OriginalComment = Instance.Comments.Include(c => c.OriginalComment).Include(c => c.Review).FirstOrDefault(c => c.Id == data.OriginalCommentId);
+            comment.Review = await Instance.Reviews.Include(r => r.Work).FirstOrDefaultAsync(r => r.Id == data.ReviewId);
+            comment.OriginalComment = await Instance.Comments.Include(c => c.OriginalComment).Include(c => c.Review).FirstOrDefaultAsync(c => c.Id == data.OriginalCommentId);
         }
     }
 }

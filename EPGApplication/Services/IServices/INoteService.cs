@@ -14,12 +14,12 @@ namespace EPGApplication.Services.IServices
 {
     public interface INoteService
     {
-        List<NoteDTO>? GetAllNotes(INoteRepository repository, NoteQueryParameters parameters);
-        Note? JustGetNote(int id, INoteRepository repository);
-        NoteDTO? GetNote(Note note);
-        NoteDTO? CreateNote(Note4Create note, INoteRepository repository);
-        NoteDTO? UpdateNote(Note4Create note, Note oldNote, INoteRepository repository);
-        NoteDTO? DeleteNote(Note note, INoteRepository repository);
+        async Task<List<NoteDTO>?> GetAllNotes(INoteRepository repository, NoteQueryParameters parameters);
+        async Task<Note?> JustGetNote(int id, INoteRepository repository);
+        async NoteDTO? GetNote(Note note);
+        async Task<NoteDTO?> CreateNote(Note4Create note, INoteRepository repository);
+        async Task<NoteDTO?> UpdateNote(Note4Create note, Note oldNote, INoteRepository repository);
+        async Task<NoteDTO?> DeleteNote(Note note, INoteRepository repository);
         public void GetMapper(IMapper mapper);
     }
 }

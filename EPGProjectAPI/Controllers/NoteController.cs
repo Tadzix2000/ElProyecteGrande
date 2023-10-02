@@ -27,7 +27,7 @@ namespace EPGProjectAPI.Controllers
             this.service.GetMapper(this.mapper);
         }
         [HttpGet]
-        public ActionResult<List<NoteDTO>> GetAll(
+        public async Task<ActionResult<List<NoteDTO>>> GetAll(
             [FromQuery] int? minValue,
             [FromQuery] int? maxValue,
             [FromQuery] DateTime? earliestDate,
@@ -39,44 +39,44 @@ namespace EPGProjectAPI.Controllers
             )
         {
             NoteQueryParameters parameters = new(minValue, maxValue, earliestDate, latestDate, currentPage, pageSize, orderBy, desc);
-            var Notes = service.GetAllNotes(repository, parameters);
+            var Notes = await service.GetAllNotes(repository, parameters);
             if (Notes is null) return NotFound();
             return Ok(Notes);
         }
         [HttpGet("{id:int}")]
-        public ActionResult<NoteDTO> GetOne(int id)
+        public async Task<ActionResult<NoteDTO>> GetOne(int id)
         {
-            var Note = service.JustGetNote(id, repository);
+            var Note = await service.JustGetNote(id, repository);
             if (Note is null) return NotFound();
             var DTO = service.GetNote(Note);
             return Ok(DTO);
         }
         [HttpPost]
-        public IActionResult CreateNote([FromBody] Note4Create note4Create)
+        public async Task<IActionResult> CreateNote([FromBody] Note4Create note4Create)
         {
-            var NoteDTO = service.CreateNote(note4Create, repository);
+            var NoteDTO = await service.CreateNote(note4Create, repository);
             if (NoteDTO is null) return BadRequest();
             return CreatedAtAction(nameof(GetOne), new { id = NoteDTO.Id }, NoteDTO);
         }
 
 
         [HttpDelete("{id:int}")]
-        public IActionResult DeleteNote(int id)
+        public async Task<IActionResult> DeleteNote(int id)
         {
-            var Note = service.JustGetNote(id, repository);
+            var Note = await service.JustGetNote(id, repository);
             if (Note is null) return NotFound();
-            var NoteDTO = service.DeleteNote(Note, repository);
+            var NoteDTO = await service.DeleteNote(Note, repository);
             if (NoteDTO is null) return BadRequest();
             return NoContent();
         }
 
 
         [HttpPut("{id:int}")]
-        public IActionResult UpdateNote(int id, [FromBody] Note4Create UpdateData)
+        public async Task<IActionResult> UpdateNote(int id, [FromBody] Note4Create UpdateData)
         {
-            var Note = service.JustGetNote(id, repository);
+            var Note = await service.JustGetNote(id, repository);
             if (Note is null) return NotFound();
-            var NoteDTO = service.UpdateNote(UpdateData, Note, repository);
+            var NoteDTO = await service.UpdateNote(UpdateData, Note, repository);
             if (NoteDTO is null) return BadRequest();
             return NoContent();
         }

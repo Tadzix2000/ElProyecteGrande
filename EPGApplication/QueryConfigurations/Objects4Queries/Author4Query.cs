@@ -24,7 +24,7 @@ namespace EPGApplication.QueryConfigurations.Objects4Queries
             mapper.Map(parameters, this);
             pagination = new PaginationMetadata(totalItemCount, parameters.currentPage, parameters.pageSize);
         }
-        public List<Author> GetDesiredData(IQueryable<Author> query)
+        public async Task<List<Author>> GetDesiredData(IQueryable<Author> query)
         {
             query = DateBorders.latestDate == null || DateBorders.earliestDate == null || DateBorders.earliestDate > DateBorders.latestDate ? query : query.Where(a => a.CreationDate >= DateBorders.earliestDate && a.CreationDate <= DateBorders.latestDate);
             query = country == null ? query : query.Where(a => a.Country == country);
@@ -45,7 +45,7 @@ namespace EPGApplication.QueryConfigurations.Objects4Queries
                 }
             }
             query = query.Skip((int)((pagination.currentPage - 1) * pagination.pageSize)).Take((int)pagination.pageSize);
-            return query.ToList();
+            return query.ToListAsync();
         }
     }
 }

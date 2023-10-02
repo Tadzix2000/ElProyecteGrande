@@ -14,13 +14,13 @@ namespace EPGApplication.Services.IServices
 {
     public interface IAuthorService
     {
-        public List<AuthorDTO>? GetAuthors(IAuthorRepository repository, AuthorQueryParameters parameters);
+        public async Task<List<AuthorDTO>?> GetAuthors(IAuthorRepository repository, AuthorQueryParameters parameters);
         public AuthorDTO? GetAuthor(Author author);
-        public Author? JustGetAuthor(int id, IAuthorRepository repository);
-        public List<WorkDTO>? GetWorks(Author author, IAuthorRepository repository);
-        public AuthorDTO? CreateAuthor(Author4Create author, IAuthorRepository repository);
-        public AuthorDTO? UpdateAuthor(Author4Create data, Author oldAuthor, IAuthorRepository repository);
-        public AuthorDTO? DeleteAuthor(Author author, IAuthorRepository repository);
+        public async Task<Author?> JustGetAuthor(int id, IAuthorRepository repository);
+        public async Task<List<WorkDTO>?> GetWorks(Author author, IAuthorRepository repository);
+        public async Task<AuthorDTO?> CreateAuthor(Author4Create author, IAuthorRepository repository);
+        public async Task<AuthorDTO?> UpdateAuthor(Author4Create data, Author oldAuthor, IAuthorRepository repository);
+        public async Task<AuthorDTO?> DeleteAuthor(Author author, IAuthorRepository repository);
         public void GetMapper(IMapper mapper);
     }
 }

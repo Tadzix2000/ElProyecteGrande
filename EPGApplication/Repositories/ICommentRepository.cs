@@ -12,13 +12,13 @@ namespace EPGApplication.Repositories.IRepositories
 {
     public interface ICommentRepository
     {
-        public List<Comment>? GetComments(CommentQueryParameters parameters);
-        public Comment? GetComment(int? id);
-        public List<Comment>? GetResponsesFromComment(Comment comment, CommentQueryParameters parameters);
-        public Comment? CreateComment(Comment Data);
-        public bool UpdateComment(Comment oldComment, Comment4Create Data);
-        public bool DeleteComment(Comment comment);
-        public void DeleteCommentResponses(Comment comment);
-        public void GetSuperiorObjects(Comment4Create data, Comment comment);
+        public async Task<List<Comment>?> GetComments(CommentQueryParameters parameters);
+        public async Task<Comment?> GetComment(int? id);
+        public async Task<List<Comment>?> GetResponsesFromComment(Comment comment, CommentQueryParameters parameters);
+        public async Task<Comment?> CreateComment(Comment Data);
+        public async Task<bool> UpdateComment(Comment oldComment, Comment4Create Data);
+        public async Task<bool> DeleteComment(Comment comment);
+        public async Task<void> DeleteCommentResponses(Comment comment);
+        public async Task<void> GetSuperiorObjects(Comment4Create data, Comment comment);
     }
 }

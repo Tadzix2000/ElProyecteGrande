@@ -18,9 +18,9 @@ namespace EPGApplication.Services.Services
     {
         public IMapper Mapper;
 
-        public List<CommentDTO>? GetComments(ICommentRepository repository, CommentQueryParameters parameters)
+        public async Task<List<CommentDTO>?> GetComments(ICommentRepository repository, CommentQueryParameters parameters)
         {
-            var Result = repository.GetComments(parameters);
+            var await Result = repository.GetComments(parameters);
             if (Result is null || Result.Count() == 0) return null;
             var ResultDTO = new List<CommentDTO>();
             foreach (var Comment in Result)
@@ -37,13 +37,13 @@ namespace EPGApplication.Services.Services
             //CommentDTO.AssignFeatures(this, Comment);
             return CommentDTO;
         }
-        public Comment? JustGetComment(int id, ICommentRepository repository)
+        public async Task<Comment?> JustGetComment(int id, ICommentRepository repository)
         {
-            return repository.GetComment(id);
+            return await repository.GetComment(id);
         }
-        public List<CommentDTO>? GetResponsesFromComment(Comment comment, ICommentRepository repository, CommentQueryParameters parameters)
+        public async Task<List<CommentDTO>?> GetResponsesFromComment(Comment comment, ICommentRepository repository, CommentQueryParameters parameters)
         {
-            var Responses = repository.GetResponsesFromComment(comment, parameters);
+            var Responses = await repository.GetResponsesFromComment(comment, parameters);
             if (Responses is null) return null;
             var ResultDTO = new List<CommentDTO>();
             foreach(var response in ResultDTO)
@@ -52,27 +52,27 @@ namespace EPGApplication.Services.Services
             }
             return ResultDTO;
         }
-        public CommentDTO? CreateComment(Comment4Create Data, ICommentRepository repository)
+        public async Task<CommentDTO?> CreateComment(Comment4Create Data, ICommentRepository repository)
         {
             var Comment = Mapper.Map<Comment>(Data);
-            repository.GetSuperiorObjects(Data, Comment);
+            await repository.GetSuperiorObjects(Data, Comment);
             if (!Comment.VerifyNullables()) return null;
-            Comment = repository.CreateComment(Comment);
+            Comment = await repository.CreateComment(Comment);
             if (Comment is null) return null;
             return Mapper.Map<CommentDTO>(Comment);
         }
-        public CommentDTO? UpdateComment(Comment4Create Data, Comment oldComment, ICommentRepository repository)
+        public async Task<CommentDTO?> UpdateComment(Comment4Create Data, Comment oldComment, ICommentRepository repository)
         {
             var Comment = Mapper.Map<Comment>(Data);
-            repository.UpdateComment(oldComment, Data);
-            repository.GetSuperiorObjects(Data, Comment);
+            var update = await repository.UpdateComment(oldComment, Data);
+            await repository.GetSuperiorObjects(Data, Comment);
             if (!Comment.VerifyNullables()) return null;
-            if (repository.UpdateComment(oldComment, Data)) return Mapper.Map<CommentDTO>(oldComment);
+            if (update) return Mapper.Map<CommentDTO>(oldComment);
             return null;
         }
-        public CommentDTO? DeleteComment(Comment comment, ICommentRepository repository)
+        public async Task<CommentDTO?> DeleteComment(Comment comment, ICommentRepository repository)
         {
-            if (repository.DeleteComment(comment)) return Mapper.Map<CommentDTO>(comment);
+            if (await repository.DeleteComment(comment)) return Mapper.Map<CommentDTO>(comment);
             return null;
         }
         public void GetMapper(IMapper mapper)

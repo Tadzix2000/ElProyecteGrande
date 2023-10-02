@@ -22,53 +22,53 @@ namespace EPGApplication.Repositories.NormalRepositories
         {
         }
 
-        public List<Author>? GetAuthors(AuthorQueryParameters parameters)
+        public async Task<List<Author>?> GetAuthors(AuthorQueryParameters parameters)
         {
-            var query = Instance.Authors.AsQueryable();
-            int itemCount = query.Count();
+            var query = await Instance.Authors.AsQueryable();
+            int itemCount = await query.Count();
             var queryManager = new Author4Query(parameters, itemCount, Mapper);
-            return queryManager.GetDesiredData(query);
+            return await queryManager.GetDesiredData(query);
         }
-        public Author? GetAuthor(int id)
+        public async Task<Author?> GetAuthor(int id)
         {
-            return Instance.Authors.Find(id);
+            return Instance.Authors.FirstOrDefaultAsync(a => a.Id == id);
         }
-        public List<Work>? GetWorksFromAuthor(Author author)
+        public async Task<List<Work>?> GetWorksFromAuthor(Author author)
         {
-            return Instance.Works.Include(w => w.Author).Where(w => w.Author == author).ToList();
+            return Instance.Works.Include(w => w.Author).Where(w => w.Author == author).ToListAsync();
         }
-        public Author? CreateAuthor(Author author)
+        public async Task<Author?> CreateAuthor(Author author)
         {
-            Instance.Add(author);
-            Instance.SaveChanges();
+            await Instance.AddAsync(author);
+            await Instance.SaveChanges();
             return author;
         }
-        public bool UpdateAuthor(Author oldAuthor, Author4Create data)
+        public async Task<bool> UpdateAuthor(Author oldAuthor, Author4Create data)
         {
-            var authorToUpdate = Instance.Authors.FirstOrDefault(a => a.Id == oldAuthor.Id);
+            var authorToUpdate = await Instance.Authors.FirstOrDefault(a => a.Id == oldAuthor.Id);
             Mapper.Map(data, authorToUpdate);
-            Instance.SaveChanges();
+            await Instance.SaveChanges();
             return true;
         }
-        public void DeleteAuthorWorks(Author author)
+        public async Task<void> DeleteAuthorWorks(Author author)
         {
             var works = Instance.Works.Where(w => w.Author == author);
             var fastRepo = new WorkRepository(Instance, Mapper);
-            foreach(var work in works) fastRepo.DeleteWork(work);
+            foreach(var work in works) await fastRepo.DeleteWork(work);
         }
-        public bool DeleteAuthor(Author author)
+        public async Task<bool> DeleteAuthor(Author author)
         {
             if (author != null)
             {
-                DeleteAuthorWorks(author);
-                Instance.Remove(author);
-                Instance.SaveChanges();
+                await DeleteAuthorWorks(author);
+                Instance.RemoveAsync(author);
+                Instance.SaveChangesAsync();
                 return true;
             }
             return false;
         }
 
-        public void GetSuperiorObjects(Author4Create data, Author author) { }
+        public async Task<void> GetSuperiorObjects(Author4Create data, Author author) { }
 
 
 

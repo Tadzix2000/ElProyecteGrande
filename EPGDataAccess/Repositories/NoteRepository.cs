@@ -13,28 +13,28 @@ namespace EPGApplication.Repositories.NormalRepositories
     public class NoteRepository : MainRepository, INoteRepository
     {
         public NoteRepository(DataInstance instance, IMapper mapper) : base(instance, mapper) { }
-        public List<Note>? GetNotes(NoteQueryParameters parameters)
+        public async Task<List<Note>?> GetNotes(NoteQueryParameters parameters)
         {
-            var query = Instance.Notes.Include(n => n.Work).AsQueryable();
-            int itemCount = query.Count();
+            var query = await Instance.Notes.Include(n => n.Work).AsQueryable();
+            int itemCount = await query.Count();
             var queryManager = new Note4Query(parameters, itemCount, Mapper);
-            return queryManager.GetDesiredData(query);
+            return await queryManager.GetDesiredData(query);
         }
         public Note? GetNote(int id)
         {
-            return Instance.Notes.Include(n => n.Work).FirstOrDefault(n => n.Id == id);
+            return Instance.Notes.Include(n => n.Work).FirstOrDefaultAsync(n => n.Id == id);
         }
         public Note? CreateNote(Note Data)
         {
-            Instance.Notes.Add(Data);
-            Instance.SaveChanges();
+            await Instance.Notes.AddAsync(Data);
+            await Instance.SaveChangesAsync();
             return Data;
         }
         public bool UpdateNote(Note oldNote, Note4Create Data)
         {            
-            var noteToUpdate = Instance.Notes.FirstOrDefault(n => n.Id == oldNote.Id);
+            var noteToUpdate = await Instance.Notes.FirstOrDefaultAsync(n => n.Id == oldNote.Id);
             Mapper.Map(Data, noteToUpdate);
-            Instance.SaveChanges();
+            await Instance.SaveChangesAsync();
             //if (GetNote(oldNote.Id) == oldNote) return false;
             return true;
         }

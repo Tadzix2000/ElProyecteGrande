@@ -17,9 +17,9 @@ namespace EPGApplication.Services.Services
     {
         public IMapper Mapper;
 
-        public List<NoteDTO>? GetAllNotes(INoteRepository repository, NoteQueryParameters parameters)
+        public async Task<List<NoteDTO>?> GetAllNotes(INoteRepository repository, NoteQueryParameters parameters)
         {
-            var Notes = repository.GetNotes(parameters);
+            var Notes = await repository.GetNotes(parameters);
             if (Notes is null || Notes.Count() == 0) return null;
             var NotesDTO = new List<NoteDTO>();
             foreach (var Note in Notes)
@@ -33,29 +33,29 @@ namespace EPGApplication.Services.Services
             if (note is null) return null;
             return Mapper.Map<NoteDTO>(note);
         }
-        public Note? JustGetNote(int id, INoteRepository repository)
+        public async Task<Note?> JustGetNote(int id, INoteRepository repository)
         {
-            return repository.GetNote(id);
+            return await repository.GetNote(id);
         }
-        public NoteDTO? CreateNote(Note4Create note, INoteRepository repository)
+        public async Task<NoteDTO?> CreateNote(Note4Create note, INoteRepository repository)
         {
             var Note = Mapper.Map<Note>(note);
-            repository.GetSuperiorObjects(note, Note);
+            await repository.GetSuperiorObjects(note, Note);
             if (!Note.VerifyNullables()) return null;
-            Note = repository.CreateNote(Note);
+            Note = await repository.CreateNote(Note);
             return Mapper.Map<NoteDTO>(Note);
         }
-        public NoteDTO? UpdateNote(Note4Create note, Note oldNote, INoteRepository repository)
+        public async Task<NoteDTO?> UpdateNote(Note4Create note, Note oldNote, INoteRepository repository)
         {
             var Note = Mapper.Map<Note>(note);
-            repository.GetSuperiorObjects(note, Note);
+            await repository.GetSuperiorObjects(note, Note);
             if (!Note.VerifyNullables()) return null;
-            if (repository.UpdateNote(oldNote, note)) return Mapper.Map<NoteDTO>(oldNote);
+            if (await repository.UpdateNote(oldNote, note)) return Mapper.Map<NoteDTO>(oldNote);
             return null;
         }
         public NoteDTO? DeleteNote(Note note, INoteRepository repository)
         {
-            if (repository.DeleteNote(note)) return Mapper.Map<NoteDTO>(note);
+            if (await repository.DeleteNote(note)) return Mapper.Map<NoteDTO>(note);
             return null;
         }
         public void GetMapper(IMapper mapper)

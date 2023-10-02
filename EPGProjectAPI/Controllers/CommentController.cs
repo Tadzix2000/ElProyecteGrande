@@ -27,7 +27,7 @@ namespace EPGProjectAPI.Controllers
             this.service.GetMapper(this.mapper);
         }
         [HttpGet]
-        public ActionResult<IEnumerable<CommentDTO>> GetAll(
+        public async Task<ActionResult<IEnumerable<CommentDTO>>> GetAll(
             [FromQuery] string? search,
             [FromQuery] DateTime? earliestDate,
             [FromQuery] DateTime? latestDate,
@@ -38,19 +38,19 @@ namespace EPGProjectAPI.Controllers
             )
         {
             CommentQueryParameters parameters = new(search, earliestDate, latestDate, currentPage, pageSize, orderBy, desc);
-            var Comments = service.GetComments(repository, parameters);
+            var Comments = await service.GetComments(repository, parameters);
             if (Comments is null) return NotFound();
             else return Ok(Comments);
         }
         [HttpGet("{id:int}")]
-        public ActionResult<CommentDTO> GetOne(int id)
+        public async Task<ActionResult<CommentDTO>> GetOne(int id)
         {
-            var Comment = service.JustGetComment(id, repository);
+            var Comment = await service.JustGetComment(id, repository);
             if (Comment is null) return NotFound();
             else return service.GetComment(Comment);
         }
         [HttpGet("{id:int}/responses")]
-        public ActionResult<IEnumerable<CommentDTO>> GetAllResponses(
+        public async Task<ActionResult<IEnumerable<CommentDTO>>> GetAllResponses(
             int id,
             [FromQuery] string? search,
             [FromQuery] DateTime? earliestDate,
@@ -61,40 +61,40 @@ namespace EPGProjectAPI.Controllers
             [FromQuery] bool? desc
             )
         {
-            var Comment = service.JustGetComment(id, repository);
+            var Comment = await service.JustGetComment(id, repository);
             if (Comment is null) return NotFound();
             CommentQueryParameters parameters = new(search, earliestDate, latestDate, currentPage, pageSize, orderBy, desc);
-            var Comments = service.GetResponsesFromComment(Comment, repository, parameters);
+            var Comments = await service.GetResponsesFromComment(Comment, repository, parameters);
             if (Comments is null) return NotFound();
             else return Comments;
         }
 
 
         [HttpPost]
-        public IActionResult CreateComment([FromBody] Comment4Create comment4Create)
+        public async Task<IActionResult> CreateComment([FromBody] Comment4Create comment4Create)
         {
-            var newComment = service.CreateComment(comment4Create, repository);
+            var newComment = await service.CreateComment(comment4Create, repository);
             if (newComment is null) return BadRequest();
             else return CreatedAtAction(nameof(GetOne), new {id = newComment.Id}, newComment);
         }
 
 
         [HttpDelete("{id:int}")]
-        public IActionResult DeleteComment(int id)
+        public async Task<IActionResult> DeleteComment(int id)
         {
-            var deletedComment = service.JustGetComment(id, repository);
-            var deletedCommentDTO = service.DeleteComment(deletedComment, repository);
+            var deletedComment = await service.JustGetComment(id, repository);
+            var deletedCommentDTO = await service.DeleteComment(deletedComment, repository);
             if (deletedCommentDTO is null) return NotFound();
             else return NoContent();
         }
 
 
         [HttpPut("{id:int}")]
-        public IActionResult UpdateComment(int id, [FromBody] Comment4Create UpdateData)
+        public async Task<IActionResult> UpdateComment(int id, [FromBody] Comment4Create UpdateData)
         {
-            var comment = service.JustGetComment(id, repository);
+            var comment = await service.JustGetComment(id, repository);
             if (comment is null) return NotFound();
-            var commentDTO = service.UpdateComment(UpdateData, comment, repository);
+            var commentDTO = await service.UpdateComment(UpdateData, comment, repository);
             if (commentDTO is null) return BadRequest();
             return NoContent();
         }
