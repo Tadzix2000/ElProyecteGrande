@@ -19,7 +19,8 @@ namespace EPGApplication.QueryConfigurations.QueryParameters
         public int? pageSize;
         public string? orderBy;
         public bool? desc;
-        public WorkQueryParameters(string? search, DateTime? earliestRealeaseDate, DateTime? latestReleaseDate, DateTime? earliestPublicationDate, DateTime? latestPublicationDate, DateTime? earliestNoteDate, DateTime? latestNoteDate, double? popularityWeight, string? language, bool? searchTranslations, int? currentPage, int? pageSize, string? orderBy, bool? desc)
+        public string? country;
+        public WorkQueryParameters(string? search, DateTime? earliestRealeaseDate, DateTime? latestReleaseDate, DateTime? earliestPublicationDate, DateTime? latestPublicationDate, DateTime? earliestNoteDate, DateTime? latestNoteDate, double? popularityWeight, string? language, bool? searchTranslations, int? currentPage, int? pageSize, string? orderBy, bool? desc, string? country)
         {
             this.search = search;
             this.realeaseRange = (earliestRealeaseDate, latestReleaseDate);
@@ -32,6 +33,7 @@ namespace EPGApplication.QueryConfigurations.QueryParameters
             this.pageSize = pageSize;
             this.orderBy = orderBy;
             this.desc = desc;
+            this.country = country;
         }
     }
 }

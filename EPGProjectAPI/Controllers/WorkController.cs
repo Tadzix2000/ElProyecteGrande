@@ -42,9 +42,10 @@ namespace EPGProjectAPI.Controllers
             [FromQuery] int? pageSize,
             [FromQuery] string? orderBy,
             [FromQuery] bool? desc,
-            [FromQuery] bool? averageNotesWithTranslations
+            [FromQuery] string? country
             )
         {
+            WorkQueryParameters parameters = new(search, earliestRealeaseDate, latestReleaseDate, earliestPublicationDate, latestPublicationDate, earliestNoteDate, latestNoteDate, popularityWeight, language, searchTranslations, currentPage, pageSize, orderBy, desc, country);
             var works = service.GetWorks(repository);
             if (works == null) { return NotFound(); }
             return Ok(works);

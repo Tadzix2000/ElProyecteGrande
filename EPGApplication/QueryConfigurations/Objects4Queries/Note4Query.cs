@@ -22,7 +22,7 @@ namespace EPGApplication.QueryConfigurations.Objects4Queries
             mapper.Map(parameters, this);
             pagination = new PaginationMetadata(totalItemCount, parameters.currentPage, parameters.pageSize);
         }
-        public Note4Query(WorkQueryParameters parameters)
+        public Note4Query(Work4Query parameters)
         {
             this.DateBorders = parameters.noteRange;
             orderBy = null;

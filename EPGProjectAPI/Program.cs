@@ -54,12 +54,18 @@ builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddScoped<INoteRepository, NoteRepository>();
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 builder.Services.AddScoped<IWorkRepository, WorkRepository>();
+builder.Services.AddCors();
+
+
 //builder.Services.AddIdentity<ServiceUser, IdentityRole>(options =>
 //{
 //    options.User.RequireUniqueEmail = true;
 //})
 //    .AddEntityFrameworkStores<DataInstance>().AddDefaultTokenProviders();
 var app = builder.Build();
+app.UseCors(p => p.WithOrigins("http://localhost:3000")
+    .AllowAnyHeader()
+    .AllowAnyMethod());
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

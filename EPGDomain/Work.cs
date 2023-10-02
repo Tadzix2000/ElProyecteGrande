@@ -27,7 +27,7 @@ namespace EPGDomain
         public Author Author { get; set; }
         public double GetAverageNote(List<Note> notes)
         {
-            return notes.Average(x => x.NoteNumber);
+            return notes.Where(n => n.Work == this).Average(x => x.NoteNumber);
         }
         public double GetForTopChart(List<Note> notes, double? popularityWeight)
         {
