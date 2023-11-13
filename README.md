@@ -16,5 +16,5 @@
 <h3>Categories</h3>
 <p>Each work can be considered as work of different categories (like for example comedy, horror etc.)</p>
 <h2>Credits</h2>
-<a href = https://github.com/Tadzix2000>Tadeusz Dramiński</a> - Backend<br />
+<a href = https://github.com/Tadzix2000>Tadeusz Dramiński</a> - Backend<br>
 <a href = https://github.com/Kowalskie789> Marek Kowalski</a> - Frontend
